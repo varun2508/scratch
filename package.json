@@ -1,8 +1,8 @@
 {
-	"name": "dooboo",
+	"name": "scratchandwin",
 	"version": "0.0.1",
-	"description": "boilerplate for react-native by dooboolab!",
-	"author": "hyochan <dooboolab@gmail.com>",
+	"description": "scratch",
+	"author": "BrosWeb",
 	"private": true,
 	"scripts": {
 		"dev": "node node_modules/react-native/local-cli/cli.js start",

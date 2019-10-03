@@ -57,6 +57,7 @@ buck-out/
 # Bundle artifact
 *.jsbundle
 .jest/
+.history/
 
 coverage/
 package-lock.json

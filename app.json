@@ -1,9 +1,9 @@
 {
-  "name": "dooboo",
-  "displayName": "dooboo",
-  "entryPoint": "index.js",
-  "packagerOpts": {
-    "assetExts": ["ttf", "png"],
-    "sourceExts": ["ts", "tsx"]
-  }
+	"name": "scratchandwin",
+	"displayName": "scratchandwin",
+	"entryPoint": "index.js",
+	"packagerOpts": {
+		"assetExts": ["ttf", "png"],
+		"sourceExts": ["ts", "tsx"]
+	}
 }
