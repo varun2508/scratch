@@ -1,0 +1,54 @@
+import { createStackNavigator } from 'react-navigation-stack';
+
+import PlayScreen from '../screen/play';
+import StatusScreen from '../screen/status';
+
+const routeConfig = {
+	StatusScreen: {
+		screen: StatusScreen,
+		// navigationOptions: ({ navigation, screenProps }): object => {
+		// 	const { theme } = screenProps;
+		// 	return {
+		// 		title: navigation.state.routeName,
+		// 		headerStyle: {
+		// 			backgroundColor: theme.background,
+		// 		},
+		// 		headerTitleStyle: { color: theme.fontColor },
+		// 		headerTintColor: theme.tintColor,
+		// 	};
+		// },
+		// path: 'intro',
+	},
+	PlayScreen: {
+		screen: PlayScreen,
+	},
+};
+
+const navigatorConfig = {
+	initialRouteName: 'StatusScreen',
+	// mode: 'card',
+	// headerMode: 'screen',
+	headerMode: 'none',
+};
+
+const AppStackNavigator = createStackNavigator(routeConfig, navigatorConfig);
+
+// interface Props {
+//   navigation?: any;
+//   theme?: object;
+// }
+
+// class RootNavigator extends React.Component<Props> {
+//   private static router = AppStackNavigator.router;
+
+//   public render() {
+//     return (
+//       <AppStackNavigator
+//         navigation={this.props.navigation}
+//         screenProps={{ theme: this.props.theme }}
+//       />
+//     );
+//   }
+// }
+
+export default AppStackNavigator;
