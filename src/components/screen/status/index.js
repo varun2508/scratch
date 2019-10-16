@@ -5,6 +5,7 @@ import {
 	Image,
 	StyleSheet,
 	TouchableWithoutFeedback,
+	ScrollView,
 } from 'react-native';
 import styled from 'styled-components';
 import LinearGradient from 'react-native-linear-gradient';
@@ -38,88 +39,92 @@ class StatusScreen extends React.Component {
 			<View style={{ flex: 1 }}>
 				<Header screenTitle='My Balance' />
 				<Container>
-					<Wrapper>
-						<OptionContainer>
-							<TextContainer>
-								<Title>Available tockens</Title>
-								<SubText>Tockens allow you to play games and win!</SubText>
-							</TextContainer>
-							<CardContaienr>
-								<Card>
-									<PointContainer>
+					<ScrollView>
+						<Wrapper>
+							<OptionContainer>
+								<TextContainer>
+									<Title>Available tockens</Title>
+									<SubText>Tockens allow you to play games and win!</SubText>
+								</TextContainer>
+								<CardContaienr>
+									<Card>
+										<PointContainer>
+											<Image
+												style={{ marginRight: 4 }}
+												source={require('icons/coin.png')}
+											/>
+											<Points>64</Points>
+											<PointsText>Tockens</PointsText>
+										</PointContainer>
+									</Card>
+									<ButtonContainer>
+										<TouchableWithoutFeedback
+											onPress={() =>
+												this.props.navigation.navigate('BuyTockens')
+											}
+										>
+											<Button>Buy more</Button>
+										</TouchableWithoutFeedback>
+									</ButtonContainer>
+								</CardContaienr>
+							</OptionContainer>
+							<OptionContainer>
+								<TextContainer>
+									<Title>Cash balance</Title>
+									<SubText>
+										You can withdraw your cash winnings. Or buy more play
+										tockens for cash. !
+									</SubText>
+								</TextContainer>
+								<CardContaienr>
+									<Card>
+										<PointContainer>
+											<Image
+												style={{ marginRight: 4 }}
+												source={require('icons/64.png')}
+											/>
+											<Points>15</Points>
+											<PointsText>Tockens</PointsText>
+										</PointContainer>
+									</Card>
+									<ButtonContainer>
+										<TouchableWithoutFeedback>
+											<Button>Add funds</Button>
+										</TouchableWithoutFeedback>
+										<TouchableWithoutFeedback>
+											<Button>Withdraw to bank</Button>
+										</TouchableWithoutFeedback>
+									</ButtonContainer>
+								</CardContaienr>
+							</OptionContainer>
+						</Wrapper>
+						<CardMD>
+							<LinearGradient
+								style={{ borderRadius: 5 }}
+								colors={['#D8341D', '#FE5B3B']}
+								start={{ x: 0.0, y: 0.25 }}
+								end={{ x: 0.5, y: 1.0 }}
+							>
+								<StatusContainer>
+									<StatusWrapper>
 										<Image
 											style={{ marginRight: 4 }}
-											source={require('icons/coin.png')}
+											source={require('icons/Vector.png')}
 										/>
-										<Points>64</Points>
-										<PointsText>Tockens</PointsText>
-									</PointContainer>
-								</Card>
-								<ButtonContainer>
-									<TouchableWithoutFeedback
-										onPress={() => this.props.navigation.navigate('BuyTockens')}
-									>
-										<Button>Buy more</Button>
-									</TouchableWithoutFeedback>
-								</ButtonContainer>
-							</CardContaienr>
-						</OptionContainer>
-						<OptionContainer>
-							<TextContainer>
-								<Title>Cash balance</Title>
-								<SubText>
-									You can withdraw your cash winnings. Or buy more play tockens
-									for cash. !
-								</SubText>
-							</TextContainer>
-							<CardContaienr>
-								<Card>
-									<PointContainer>
-										<Image
-											style={{ marginRight: 4 }}
-											source={require('icons/64.png')}
-										/>
-										<Points>15</Points>
-										<PointsText>Tockens</PointsText>
-									</PointContainer>
-								</Card>
-								<ButtonContainer>
-									<TouchableWithoutFeedback>
-										<Button>Add funds</Button>
-									</TouchableWithoutFeedback>
-									<TouchableWithoutFeedback>
-										<Button>Withdraw to bank</Button>
-									</TouchableWithoutFeedback>
-								</ButtonContainer>
-							</CardContaienr>
-						</OptionContainer>
-					</Wrapper>
-					<CardMD>
-						<LinearGradient
-							style={{ borderRadius: 5 }}
-							colors={['#D8341D', '#FE5B3B']}
-							start={{ x: 0.0, y: 0.25 }}
-							end={{ x: 0.5, y: 1.0 }}
-						>
-							<StatusContainer>
-								<StatusWrapper>
-									<Image
-										style={{ marginRight: 4 }}
-										source={require('icons/Vector.png')}
-									/>
-									<View>
-										<Text1>Your level</Text1>
-										<H1>Gold play</H1>
-									</View>
-								</StatusWrapper>
-								<Text2>
-									These 2 lines here explain how the status works and what it
-									helps to achieve.
-								</Text2>
-								<ButtonText>Upgrade now!</ButtonText>
-							</StatusContainer>
-						</LinearGradient>
-					</CardMD>
+										<View>
+											<Text1>Your level</Text1>
+											<H1>Gold play</H1>
+										</View>
+									</StatusWrapper>
+									<Text2>
+										These 2 lines here explain how the status works and what it
+										helps to achieve.
+									</Text2>
+									<ButtonText>Upgrade now!</ButtonText>
+								</StatusContainer>
+							</LinearGradient>
+						</CardMD>
+					</ScrollView>
 				</Container>
 				<ScreenFooter navigation={this.props.navigation} />
 			</View>

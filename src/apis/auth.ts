@@ -1,6 +1,6 @@
 import NavigationService from '../components/navigation/NavigationService';
 import ApiUtils from './api-utils';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Alert } from 'react-native';
 
 export const login = async (
 	body: object,
@@ -24,6 +24,8 @@ export const login = async (
 			console.log('----------ress on login', response, 'user', user);
 
 			await AsyncStorage.setItem('scratchToken', user.token);
+			///// need to be deleted after Context will be set
+			await AsyncStorage.setItem('scratchUserId', user.id);
 			NavigationService.navigate('StatusScreen', {});
 			return response;
 		})
@@ -51,6 +53,8 @@ export const register = async (body: object): Promise<Response> => {
 		const user = await res.json();
 		console.log('----------ress on register', res, 'user', user);
 		AsyncStorage.setItem('scratchToken', user.token);
+		///// need to be deleted after Context will be set
+		await AsyncStorage.setItem('scratchUserId', user.id);
 		NavigationService.navigate('StatusScreen', {});
 
 		return user;
@@ -104,6 +108,8 @@ export const logout = async (
 		// const user = await res.json();
 		console.log('----------calling logout');
 		await AsyncStorage.removeItem('scratchToken');
+		///// need to be deleted after Context will be set
+		await AsyncStorage.removeItem('scratchUserId');
 		NavigationService.navigate('LoginScreen', {});
 	} catch (err) {
 		console.log('----------error on login');
@@ -111,7 +117,7 @@ export const logout = async (
 	}
 };
 
-export const getCurrentUser = async (body: object): Promise<Response> => {
+export const getCurrentUser = async (): Promise<Response> => {
 	const token = await AsyncStorage.getItem('scratchToken');
 	const fetchOption: RequestInit = {
 		method: 'GET',
@@ -120,7 +126,7 @@ export const getCurrentUser = async (body: object): Promise<Response> => {
 			Authorization: `Bearer ${token}`,
 		}),
 	};
-
+	console.log('-------------------------------------------------');
 	const URL = `${ApiUtils.getRootUrl()}/users/me`;
 	return fetch(URL, fetchOption)
 		.then((response) => ApiUtils.checkStatus(response, fetchOption))
@@ -134,6 +140,61 @@ export const getCurrentUser = async (body: object): Promise<Response> => {
 			let parsed = null;
 			parsed = await err.json();
 			console.log('----------error on login');
+			return new Error(err);
+		});
+};
+
+export const updateUser = async (body: object): Promise<Response> => {
+	const fetchOption: RequestInit = {
+		method: 'PUT',
+		headers: new Headers({
+			'Content-Type': 'application/json',
+		}),
+		body: JSON.stringify(body),
+	};
+
+	try {
+		const URL = `${ApiUtils.getRootUrl()}/users/${body.userId}`;
+		const res: Response = await fetch(URL, fetchOption);
+		await ApiUtils.checkStatus(res, fetchOption);
+		// const user = await res.json();
+		console.log('----------ress on register', res);
+
+		Alert.alert('User is updated!');
+
+		return res;
+	} catch (err) {
+		console.log('----------error on update', err);
+		throw new Error(err);
+	}
+};
+
+export const getUserById = async (userId: string): Promise<Response> => {
+	const token = await AsyncStorage.getItem('scratchToken');
+	const fetchOption: RequestInit = {
+		method: 'GET',
+		headers: new Headers({
+			Accept: 'application/json',
+			Authorization: `Bearer ${token}`,
+		}),
+	};
+	console.log(
+		'--------------------userId-----------------------------',
+		userId,
+	);
+	const URL = `${ApiUtils.getRootUrl()}/users/${userId}`;
+	return fetch(URL, fetchOption)
+		.then((response) => ApiUtils.checkStatus(response, fetchOption))
+		.then(async (response) => {
+			let user = await response.json();
+			console.log('----------ress on getUserById', response, 'user', user);
+
+			return user;
+		})
+		.catch(async (err) => {
+			let parsed = null;
+			parsed = await err.json();
+			console.log('----------error on getUserById');
 			return new Error(err);
 		});
 };

@@ -4,6 +4,7 @@ import StatusScreen from '../screen/status';
 import PlayScreen from '../screen/play';
 import MoreScreen from '../screen/more';
 import BuyTockens from '../screen/buy-tokens';
+import GameScreen from '../screen/game';
 
 const routeConfig = {
 	StatusScreen: {
@@ -29,6 +30,9 @@ const routeConfig = {
 	},
 	BuyTockens: {
 		screen: BuyTockens,
+	},
+	GameScreen: {
+		screen: GameScreen,
 	},
 };
 

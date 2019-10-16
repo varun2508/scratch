@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, Image } from 'react-native';
-import { Header } from 'shared';
+import { View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Header, Add } from 'shared';
 import ScreenFooter from 'shared/footer/index';
 import styled from 'styled-components';
-
 const list = [1, 2, 3, 4, 5, 6, 7, 8];
 
 class PlayScreen extends React.Component {
@@ -21,54 +20,102 @@ class PlayScreen extends React.Component {
 			},
 		};
 	}
+	state = {
+		scrollEnabled: false,
+	};
+
 	render() {
 		return (
 			<View style={{ flex: 1 }}>
 				<Header screenTitle='Game' />
-				<Container>
-					<Wrapper>
-						<Title>Featured</Title>
-						<ScrollView
-							showsHorizontalScrollIndicator={false}
-							horizontal
-							contentContainerStyle={{ paddingHorizontal: 20 }}
-						>
-							{list.map((item) => (
-								<Carusel key={item}>
-									<ItemContainer>
-										<Image
-											style={{ marginRight: 5, borderRadius: 5 }}
-											source={require('image/Group.png')}
-										/>
-										<Image source={require('image/Group.png')} />
-									</ItemContainer>
-									<Image
-										style={{ borderRadius: 5 }}
-										source={require('image/image.png')}
-									/>
-								</Carusel>
-							))}
-						</ScrollView>
-					</Wrapper>
-					<Wrapper>
-						<Title>Top winning this week</Title>
-						<ScrollView
-							showsHorizontalScrollIndicator={false}
-							horizontal
-							contentContainerStyle={{ paddingHorizontal: 20 }}
-						>
-							{list.map((item) => (
-								<Carusel2 key={item}>
-									<Image
-										style={{ marginRight: 5, marginBottom: 5, borderRadius: 5 }}
-										source={require('image/Group.png')}
-									/>
-									<Image source={require('image/Group.png')} />
-								</Carusel2>
-							))}
-						</ScrollView>
-					</Wrapper>
-				</Container>
+				<ScrollView>
+					<Container>
+						<Wrapper>
+							<Title>Featured</Title>
+
+							<ScrollView
+								showsHorizontalScrollIndicator={false}
+								horizontal
+								contentContainerStyle={{ paddingHorizontal: 20 }}
+							>
+								{list.map((item) => (
+									<Carusel key={item}>
+										<BigOnTopContainer>
+											<BigImageContainer
+												onPress={() =>
+													this.props.navigation.navigate('GameScreen')
+												}
+											>
+												<BigImage
+													resizeMode={'contain'}
+													source={require('image/image.png')}
+												/>
+											</BigImageContainer>
+											<TwoSmallGameContainer>
+												<SmallImageContainer
+													onPress={() =>
+														this.props.navigation.navigate('GameScreen')
+													}
+												>
+													<SmallImage
+														resizeMode={'stretch'}
+														source={require('image/image-9.png')}
+													/>
+												</SmallImageContainer>
+												<SmallImageContainer
+													onPress={() =>
+														this.props.navigation.navigate('GameScreen')
+													}
+												>
+													<SmallImage
+														resizeMode={'stretch'}
+														source={require('image/image-8.png')}
+													/>
+												</SmallImageContainer>
+											</TwoSmallGameContainer>
+										</BigOnTopContainer>
+									</Carusel>
+								))}
+							</ScrollView>
+						</Wrapper>
+						<View>
+							<Title>Top winning this week</Title>
+							<ScrollView
+								showsHorizontalScrollIndicator={false}
+								horizontal
+								contentContainerStyle={{ paddingHorizontal: 20 }}
+							>
+								{list.map((item) => (
+									<Carusel2>
+										<TwoSmallGameContainer>
+											<SmallImageContainer
+												onPress={() =>
+													this.props.navigation.navigate('GameScreen')
+												}
+											>
+												<SmallImage
+													resizeMode={'stretch'}
+													source={require('image/image-6.png')}
+												/>
+											</SmallImageContainer>
+											<SmallImageContainer
+												onPress={() =>
+													this.props.navigation.navigate('GameScreen')
+												}
+											>
+												<SmallImage
+													resizeMode={'stretch'}
+													source={require('image/image-3.png')}
+												/>
+											</SmallImageContainer>
+										</TwoSmallGameContainer>
+									</Carusel2>
+								))}
+							</ScrollView>
+						</View>
+						<Add></Add>
+					</Container>
+				</ScrollView>
 				<ScreenFooter navigation={this.props.navigation} />
 			</View>
 		);
@@ -76,28 +123,49 @@ class PlayScreen extends React.Component {
 }
 
 const Item = styled.Text``;
-const BigItemContainer = styled.View`
-	flex: 1;
-	background: blue;
+const BigOnTopContainer = styled.View`
+	display: flex;
 `;
+
 const Container = styled.View`
 	/* padding-left: 18px; */
 `;
-const ItemContainer = styled.View`
-	flex: 1;
-	flex-direction: row;
-`;
-const Carusel = styled.View`
-	width: 188px;
-	height: 214px;
-	margin-right: 5px;
-`;
-/* transform: rotate(180deg); */
-const Carusel2 = styled.View``;
 const Wrapper = styled.View`
 	padding-top: 16px;
+	height: 300px;
+`;
+const BigImageContainer = styled.TouchableOpacity`
+	height: 142px;
+	margin-bottom: 5px;
 `;
 
+const TwoSmallGameContainer = styled.TouchableOpacity`
+	flex-direction: row;
+`;
+
+const SmallImageContainer = styled.TouchableOpacity`
+	margin-right: 5px;
+`;
+
+const Carusel = styled.View`
+	width: 190px;
+	height: 384px;
+	margin-right: 5px;
+`;
+
+const BigImage = styled.Image`
+	width: 190px;
+	height: 142px;
+	border-radius: 3px;
+`;
+
+const SmallImage = styled.Image`
+	width: 91px;
+	height: 75px;
+	border-radius: 3px;
+`;
+
+const Carusel2 = styled.View``;
 const Title = styled.Text`
 	margin-left: 18px;
 	font-weight: bold;

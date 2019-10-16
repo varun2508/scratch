@@ -4,10 +4,7 @@ import NavigationService from '../components/navigation/NavigationService';
 const ApiUtils = {
 	/* eslint-disable */
 	checkStatus: async (response, options) => {
-		console.log(
-			'-response in utils--',
-			response.status || response.status_code,
-		);
+		console.log('-response in utils--', response.status);
 		if (response.status_code === 401 || response.status === 401) {
 			console.log('Unauthenticated!!');
 			AsyncStorage.removeItem('scratchToken', () => {
@@ -42,8 +39,8 @@ const ApiUtils = {
 	},
 	/* eslint-enable */
 	// localhost
-	getRootUrl: () => 'http://172.31.119.57:3000',
-	// getRootUrl: () => 'https://scratchandwin.herokuapp.com',
+	// getRootUrl: () => 'http://172.31.119.57:3000',
+	getRootUrl: () => 'https://scratchandwin.herokuapp.com',
 
 	getImageUrl: () => 'http://app.thecraftybarkeep.com',
 };

@@ -3,7 +3,6 @@ import { View, Button, TouchableOpacity, Text } from 'react-native';
 
 // import { StackActions, NavigationActions } from 'react-navigation';
 import NavButton from './navButton';
-import IconFt from 'react-native-vector-icons/Feather';
 import { Footer, FooterTab } from './styles';
 
 const ScreenFooter = ({ navigation }) => (

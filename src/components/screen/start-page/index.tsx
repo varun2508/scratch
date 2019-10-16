@@ -155,7 +155,7 @@ class StartPageScreen extends Component<Props, State> {
 						>
 							<Image
 								style={{ marginBottom: 24 }}
-								source={require('image/logo.png')}
+								source={require('assets/image/logo.png')}
 							/>
 							<Text style={styles.H1}>Scratch and Win!</Text>
 							<Text style={styles.textColor}>The product’s unique trading</Text>

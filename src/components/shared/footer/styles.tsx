@@ -3,6 +3,8 @@ import styled from 'styled-components/native';
 export const Footer = styled.View`
 	height: 80;
 	justify-content: center;
+	position: absolute;
+	bottom: 0;
 `;
 
 export const FooterTab = styled.View`

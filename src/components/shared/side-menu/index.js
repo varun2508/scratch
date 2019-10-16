@@ -6,6 +6,7 @@ import {
 	TouchableWithoutFeedback,
 	Image,
 	AsyncStorage,
+	ScrollView,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { ListItem } from 'react-native-elements';
@@ -97,7 +98,7 @@ class SideMenu extends React.Component {
 		return (
 			<Modal transparent animationType='slide' visible={isOpen}>
 				<View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-					<View
+					<ScrollView
 						style={{
 							flex: 1,
 							marginTop: 160,
@@ -254,7 +255,7 @@ class SideMenu extends React.Component {
 								/>
 							</TouchableWithoutFeedback>
 						</View>
-					</View>
+					</ScrollView>
 				</View>
 			</Modal>
 		);

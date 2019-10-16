@@ -27,6 +27,7 @@ module.exports = {
 					screen: './src/components/screen',
 					shared: './src/components/shared',
 					assets: './src/assets',
+					providers: './src/providers',
 					navigation: './src/components/navigation',
 					icons: './src/assets/icons',
 					image: './src/assets/image',
