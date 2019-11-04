@@ -117,7 +117,6 @@ class SideMenu extends React.Component {
 							<View
 								style={{
 									display: 'flex',
-									justifyContent: 'center',
 									justifyContent: 'space-between',
 									alignItems: 'center',
 									flexDirection: 'row',

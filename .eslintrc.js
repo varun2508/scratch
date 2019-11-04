@@ -11,9 +11,9 @@ module.exports = {
 			'error',
 			{
 				ignoreCase: true,
-				ignoreDeclarationSort: false,
-				ignoreMemberSort: false,
-				memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+				ignoreDeclarationSort: true,
+				ignoreMemberSort: true,
+				memberSyntaxSortOrder: ['none', 'single', 'all', 'multiple'],
 			},
 		],
 	},

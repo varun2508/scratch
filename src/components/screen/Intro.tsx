@@ -4,7 +4,7 @@ import {
 	NavigationState,
 } from 'react-navigation';
 
-import Button from '../shared/Button';
+import Button from '../shared/button';
 import { IC_MASK } from '../../utils/Icons';
 import React from 'react';
 import { User } from '../../types';

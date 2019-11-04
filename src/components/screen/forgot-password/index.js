@@ -5,12 +5,12 @@ import {
 	TextInput,
 	Image,
 	StyleSheet,
-	TouchableWithoutFeedback,
 	TouchableOpacity,
 	KeyboardAvoidingView,
-	Button,
+	Alert,
 } from 'react-native';
-
+import { forgotPassword } from '../../../apis/auth';
+import { emailValidation } from '../../../utils/validations';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -57,22 +57,21 @@ const styles = StyleSheet.create({
 class ForgotPasswordScreen extends React.Component {
 	state = {
 		userEmail: '',
-		password: '',
 	};
-	static options() {
-		return {
-			topBar: {
-				backButton: { visible: false },
-				drawBehind: false,
-				visible: false,
-				animate: false,
-			},
-		};
-	}
 
-	navigateTo = (screenName, props) => {
+	navigateTo = (screenName) => {
 		const { navigation } = this.props;
 		navigation.navigate(screenName);
+	};
+
+	resetPassword = () => {
+		const { userEmail } = this.state;
+
+		if (emailValidation(userEmail)) {
+			forgotPassword({ email: userEmail });
+		} else {
+			Alert.alert('Please enter a valid email');
+		}
 	};
 
 	render() {
@@ -97,9 +96,12 @@ class ForgotPasswordScreen extends React.Component {
 							/>
 							<Text style={styles.H1}>Reset password!</Text>
 							<Text style={styles.textColor}>
-								Enter your email below to request
+								Enter your email address and click the button --
 							</Text>
-							<Text style={styles.textColor}>a new password</Text>
+							<Text style={styles.textColor}>
+								an email will be sent to you with a link
+							</Text>
+							<Text style={styles.textColor}>to reset your password</Text>
 							<TextInput
 								style={styles.input}
 								textAlign='center'
@@ -110,7 +112,7 @@ class ForgotPasswordScreen extends React.Component {
 							/>
 						</View>
 					</KeyboardAvoidingView>
-					<TouchableOpacity>
+					<TouchableOpacity onPress={() => this.resetPassword()}>
 						<View
 							style={{
 								backgroundColor: '#FBDC42',

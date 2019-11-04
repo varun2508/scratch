@@ -1,38 +1,30 @@
 import NavigationService from '../components/navigation/NavigationService';
 import ApiUtils from './api-utils';
 import { AsyncStorage, Alert } from 'react-native';
+import { User } from '../types';
 
 export const login = async (
 	body: object,
 	// signal?: AbortController['signal'],
 ): Promise<Response> => {
 	const fetchOption: RequestInit = {
-		// signal,
 		method: 'POST',
 		headers: new Headers({
-			Accept: 'application/json',
 			'Content-Type': 'application/json',
 		}),
 		body: JSON.stringify(body),
 	};
-
-	const URL = `${ApiUtils.getRootUrl()}/users/login`;
+	const URL = `${ApiUtils.getRootUrl()}/Clients/login`;
 	return fetch(URL, fetchOption)
 		.then((response) => ApiUtils.checkStatus(response, fetchOption))
 		.then(async (response) => {
-			let user = await response.json();
-			console.log('----------ress on login', response, 'user', user);
-
+			const user = await response.json();
 			await AsyncStorage.setItem('scratchToken', user.token);
-			///// need to be deleted after Context will be set
-			await AsyncStorage.setItem('scratchUserId', user.id);
-			NavigationService.navigate('StatusScreen', {});
-			return response;
+			await AsyncStorage.setItem('scratchUserId', user.userId);
+			return user;
 		})
 		.catch(async (err) => {
-			let parsed = null;
-			parsed = await err.json();
-			console.log('----------error on login');
+			console.log('----------error on login', err);
 			return new Error(err);
 		});
 };
@@ -47,15 +39,13 @@ export const register = async (body: object): Promise<Response> => {
 	};
 
 	try {
-		const URL = `${ApiUtils.getRootUrl()}/users`;
+		const URL = `${ApiUtils.getRootUrl()}/Clients`;
 		const res: Response = await fetch(URL, fetchOption);
 		await ApiUtils.checkStatus(res, fetchOption);
 		const user = await res.json();
 		console.log('----------ress on register', res, 'user', user);
-		AsyncStorage.setItem('scratchToken', user.token);
-		///// need to be deleted after Context will be set
-		await AsyncStorage.setItem('scratchUserId', user.id);
-		NavigationService.navigate('StatusScreen', {});
+		Alert.alert('The user have been added successfully created. Please login!');
+		NavigationService.navigate('LoginScreen', {});
 
 		return user;
 	} catch (err) {
@@ -64,7 +54,7 @@ export const register = async (body: object): Promise<Response> => {
 	}
 };
 
-export const forgotPassword = async (body: object): Promise<Response> => {
+export const forgotPassword = async (body: object): Promise<void> => {
 	const fetchOption: RequestInit = {
 		method: 'POST',
 		headers: new Headers({
@@ -73,38 +63,58 @@ export const forgotPassword = async (body: object): Promise<Response> => {
 		}),
 		body: JSON.stringify(body),
 	};
-
 	try {
 		const res: Response = await fetch(
-			`${ApiUtils.getRootUrl()}/users/forgotPassword`,
+			`${ApiUtils.getRootUrl()}/Clients/reset`,
 			fetchOption,
 		);
-		const parced = await res.json();
-		console.log('----------ress on forgot', 'parced', parced);
-
-		return res;
+		await ApiUtils.checkStatus(res, fetchOption);
+		Alert.alert("We've sent you an email with a link to reset your password");
+		NavigationService.navigate('LoginScreen', {});
 	} catch (err) {
-		console.log('----------error on forgot');
-		throw new Error(err);
+		console.log('----------error on forgot', err);
 	}
 };
 
-export const logout = async (
-	body: object,
-	// signal?: AbortController['signal'],
-) => {
+export const updatePassword = async (body: object): Promise<void> => {
+	const token = await AsyncStorage.getItem('scratchToken');
+	const fetchOption: RequestInit = {
+		method: 'POST',
+		headers: new Headers({
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `${token}`,
+		}),
+		body: JSON.stringify(body),
+	};
+	try {
+		const res: Response = await fetch(
+			`${ApiUtils.getRootUrl()}/Clients/change-password`,
+			fetchOption,
+		);
+		console.log('---------res on resset-', fetchOption);
+		await ApiUtils.checkStatus(res, fetchOption);
+		Alert.alert('Password was reset!');
+	} catch (err) {
+		console.log('----------error on reset', err);
+	}
+};
+
+export const logout = async (body: object): Promise<void> => {
+	const token = await AsyncStorage.getItem('scratchToken');
 	const fetchOption: RequestInit = {
 		// signal,
 		method: 'POST',
 		headers: new Headers({
 			Accept: 'application/json',
 			'Content-Type': 'application/json',
+			Authorization: `${token}`,
 		}),
 		body: JSON.stringify(body),
 	};
 
 	try {
-		// const res: Response = await fetch(`${ROOT_URL}/users/logout`, fetchOption);
+		// const res: Response = await fetch(`${ROOT_URL}/Clients/logout`, fetchOption);
 		// const user = await res.json();
 		console.log('----------calling logout');
 		await AsyncStorage.removeItem('scratchToken');
@@ -123,23 +133,22 @@ export const getCurrentUser = async (): Promise<Response> => {
 		method: 'GET',
 		headers: new Headers({
 			Accept: 'application/json',
-			Authorization: `Bearer ${token}`,
+			Authorization: `${token}`,
 		}),
 	};
-	console.log('-------------------------------------------------');
-	const URL = `${ApiUtils.getRootUrl()}/users/me`;
+	const URL = `${ApiUtils.getRootUrl()}/Clients/me`;
 	return fetch(URL, fetchOption)
 		.then((response) => ApiUtils.checkStatus(response, fetchOption))
 		.then(async (response) => {
-			let user = await response.json();
-			console.log('----------ress on getMyUser', response, 'user', user);
+			const user = await response.json();
+			// console.log('----------ress on getMyUser', response, 'user', user);
 
 			return user;
 		})
 		.catch(async (err) => {
-			let parsed = null;
-			parsed = await err.json();
-			console.log('----------error on login');
+			// let parsed = null;
+			// parsed = await err.json();
+			console.log('----------error on getCurrentUser');
 			return new Error(err);
 		});
 };
@@ -154,14 +163,12 @@ export const updateUser = async (body: object): Promise<Response> => {
 	};
 
 	try {
-		const URL = `${ApiUtils.getRootUrl()}/users/${body.userId}`;
+		const URL = `${ApiUtils.getRootUrl()}/Clients/${body.userId}`;
 		const res: Response = await fetch(URL, fetchOption);
 		await ApiUtils.checkStatus(res, fetchOption);
 		// const user = await res.json();
-		console.log('----------ress on register', res);
-
+		console.log('----------ress on update user', res);
 		Alert.alert('User is updated!');
-
 		return res;
 	} catch (err) {
 		console.log('----------error on update', err);
@@ -169,20 +176,17 @@ export const updateUser = async (body: object): Promise<Response> => {
 	}
 };
 
-export const getUserById = async (userId: string): Promise<Response> => {
+export const getUserById = async (userId: string | null): Promise<User> => {
 	const token = await AsyncStorage.getItem('scratchToken');
 	const fetchOption: RequestInit = {
 		method: 'GET',
 		headers: new Headers({
 			Accept: 'application/json',
-			Authorization: `Bearer ${token}`,
+			Authorization: `${token}`,
 		}),
 	};
-	console.log(
-		'--------------------userId-----------------------------',
-		userId,
-	);
-	const URL = `${ApiUtils.getRootUrl()}/users/${userId}`;
+	console.log('-----------------userId-------------------', userId);
+	const URL = `${ApiUtils.getRootUrl()}/Clients/${userId}`;
 	return fetch(URL, fetchOption)
 		.then((response) => ApiUtils.checkStatus(response, fetchOption))
 		.then(async (response) => {

@@ -5,13 +5,12 @@ import {
 	TextInput,
 	Image,
 	StyleSheet,
-	TouchableWithoutFeedback,
+	Alert,
 	TouchableOpacity,
 	KeyboardAvoidingView,
-	Button,
-	CheckBox,
 } from 'react-native';
 import { register } from '../../../apis/auth';
+import { emailValidation } from '../../../utils/validations';
 
 const styles = StyleSheet.create({
 	container: {
@@ -23,7 +22,6 @@ const styles = StyleSheet.create({
 	slideContainer: {
 		flex: 1,
 		display: 'flex',
-		// alignItems: "center",
 		justifyContent: 'center',
 	},
 	slide1: {
@@ -59,9 +57,10 @@ class RegistrationScreen extends React.Component {
 	state = {
 		email: '',
 		password: '',
-		password_confirmation: '',
+		passwordConfirmation: '',
 		acceptTerms: false,
 	};
+
 	static options() {
 		return {
 			topBar: {
@@ -72,15 +71,25 @@ class RegistrationScreen extends React.Component {
 			},
 		};
 	}
-	navigateTo = (screenName, props) => {
+
+	navigateTo = (screenName) => {
 		const { navigation } = this.props;
 		navigation.navigate(screenName);
 	};
 
 	handleRegistration = () => {
-		const { email, password } = this.state;
-		register({ email, password });
+		const { email, password, passwordConfirmation } = this.state;
+		if (password !== passwordConfirmation) {
+			Alert.alert('Passwords don`t much!');
+			return;
+		}
+		if (emailValidation(email)) {
+			register({ email, password, isActive: true, userType: 'client' });
+		} else {
+			Alert.alert('Please enter a valid email');
+		}
 	};
+
 	render() {
 		return (
 			<View style={styles.container}>
@@ -125,8 +134,8 @@ class RegistrationScreen extends React.Component {
 								textAlign='center'
 								placeholderTextColor='#828282'
 								style={styles.input}
-								onChangeText={(password_confirmation) =>
-									this.setState({ password_confirmation })
+								onChangeText={(passwordConfirmation) =>
+									this.setState({ passwordConfirmation })
 								}
 								placeholder='Repeat password'
 								secureTextEntry

@@ -1,13 +1,8 @@
-import React from 'react';
-import Temp from '../screen/Temp';
-import { Text } from 'react-native';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import LoginScreen from '../screen/login';
 import RegistrationScreen from '../screen/registration';
 import ForgotPasswordScreen from '../screen/forgot-password';
-
 import StartPageScreen from '../screen/start-page';
 const routeConfig = {
 	LoginScreen: {

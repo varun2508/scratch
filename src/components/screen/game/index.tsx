@@ -16,6 +16,8 @@ import styled from 'styled-components/native';
 import { useAppContext } from '../../../providers/AppProvider';
 import { User } from '../../types';
 import { useThemeContext } from '../../../providers/ThemeProvider';
+import { updateTockens } from '../../../apis/user';
+// import { getUserById } from '../../../apis/auth';
 
 const Container = styled.View`
 	flex: 1;
@@ -84,16 +86,15 @@ const images = {
 
 function GameScreen(props: Props): React.ReactElement {
 	let timer: number;
-	const { state, setUser } = useAppContext();
+	const { store, getMe } = useAppContext();
 	const { changeThemeType } = useThemeContext();
 	const [scrollEnabled, setScrollEnabled] = React.useState<boolean>(false);
 	const [winState, setWinState] = React.useState<string>('notTouched');
 
-	const imageRoute = `../../../assets/icons/gameElements/6.png`;
 	const results = [[], [], [], [], [], []];
 
 	const setCategory = () => {
-		let category = Math.floor(Math.random() * 6 + 1);
+		const category = Math.floor(Math.random() * 6 + 1);
 		results[category - 1].push('match');
 		console.log('-----results-----', category, results);
 		return category;
@@ -112,19 +113,37 @@ function GameScreen(props: Props): React.ReactElement {
 		// console.log('----------image progress', value, id);
 	};
 
-	const onScratchDone = ({ isScratchDone, id }): void => {
+	const onScratchDone = async ({ isScratchDone, id }): Promise<void> => {
 		// Do something
-		console.log('-----onScratchDone-----', isScratchDone, id);
+		const { user } = store;
+
+		console.log('-----onScratchDone-----', isScratchDone, id, user);
+
 		let userWins = false;
+		let updatedUser;
 		results.forEach((el) => {
 			if (el.length >= 3) {
 				userWins = true;
 			}
 		});
+
 		if (userWins) {
 			setWinState('win');
+			updatedUser = await updateTockens({
+				userId: user.id,
+				tockens: user.tockens + 50,
+			});
+			console.log('----------before getupdatedUser', updatedUser);
+			getMe(updatedUser);
 		} else {
 			setWinState('loosed');
+			updatedUser = await updateTockens({
+				userId: user.id,
+				tockens: user.tockens + 10,
+			});
+			console.log('----------before getupdatedUser', updatedUser);
+
+			getMe(updatedUser);
 		}
 	};
 
@@ -145,6 +164,7 @@ function GameScreen(props: Props): React.ReactElement {
 			source={imageSelect(setCategory())}
 		/>
 	);
+
 	const ScratchGame = (): React.ReactElement => (
 		<View style={{ margin: 10 }}>
 			<GameContainer>

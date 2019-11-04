@@ -1,0 +1,14 @@
+[
+	{
+		"code": "format",
+		"info": { "format": "email" },
+		"message": "should match format \"email\"",
+		"path": ".email"
+	},
+	{
+		"code": "minLength",
+		"info": { "limit": 8 },
+		"message": "should NOT be shorter than 8 characters",
+		"path": ".password"
+	}
+]

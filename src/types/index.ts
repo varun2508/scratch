@@ -3,7 +3,13 @@ import { StyleProp, TextStyle } from 'react-native';
 import { SFC } from 'react';
 
 export interface User {
-	displayName: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	birthDate: string;
+	tockens: number;
+	plan: string;
+	id: string;
 }
 interface IconProps {
 	style?: StyleProp<TextStyle>;

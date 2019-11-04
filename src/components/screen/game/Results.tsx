@@ -59,7 +59,6 @@ interface Props {
 }
 
 function Results(props: Props): React.ReactElement {
-	console.log('----------propssss---', props);
 	return (
 		<WinContainer>
 			{props.winState === 'win' ? (
@@ -95,7 +94,7 @@ function Results(props: Props): React.ReactElement {
 					}}
 				>
 					<Text style={{ color: '#333333', fontSize: 16, fontWeight: 'bold' }}>
-						Get
+						Play more
 					</Text>
 				</View>
 			</TouchableOpacity>

@@ -1,16 +1,16 @@
 import React, { useReducer } from 'react';
-
-import { User } from '../types';
 import createCtx from '../utils/createCtx';
+import { User } from '../types';
 
 interface Context {
-	state: State;
+	store: State;
 	setUser: (user: User) => void;
+	getMe: (user: User) => void;
 	resetUser: () => void;
 }
 const [useCtx, Provider] = createCtx<Context>();
 
-type dispatchType = 'reset-user' | 'set-user';
+type dispatchType = 'reset-user' | 'set-user' | 'get-me';
 
 export interface State {
 	user: User;
@@ -18,7 +18,13 @@ export interface State {
 
 const initialState: State = {
 	user: {
-		displayName: '',
+		firstName: '',
+		lastName: '',
+		email: '',
+		birthDate: '',
+		tockens: 0,
+		plan: '',
+		id: '',
 	},
 };
 
@@ -31,9 +37,18 @@ interface Props {
 	children?: React.ReactElement;
 }
 
-type Reducer = (state: State, action: Action) => State;
+type Reducer = (store: State, action: Action) => State;
+
+const getMe = (dispatch: React.Dispatch<Action>) => (user: User): void => {
+	console.log('--------getMe user--', user);
+	dispatch({
+		type: 'get-me',
+		payload: { user },
+	});
+};
 
 const setUser = (dispatch: React.Dispatch<Action>) => (user: User): void => {
+	console.log('--------setting user--', user);
 	dispatch({
 		type: 'set-user',
 		payload: { user },
@@ -47,26 +62,28 @@ const resetUser = (dispatch: React.Dispatch<Action>) => (): void => {
 	});
 };
 
-// prettier-ignore
-const reducer: Reducer = (state = initialState, action) => {
-  switch (action.type) {
-  case 'reset-user':
-  case 'set-user':
-    return { ...state, user: action.payload.user };
-  default:
-    return state;
-  }
+const reducer: Reducer = (store = initialState, action) => {
+	switch (action.type) {
+		case 'reset-user':
+		case 'set-user':
+			return { ...store, user: action.payload.user };
+		case 'get-me':
+			return { ...store, user: action.payload.user };
+		default:
+			return store;
+	}
 };
 
 function AppProvider(props: Props): React.ReactElement {
-	const [state, dispatch] = useReducer<Reducer>(reducer, initialState);
+	const [store, dispatch] = useReducer<Reducer>(reducer, initialState);
 
 	const actions = {
+		getMe: getMe(dispatch),
 		setUser: setUser(dispatch),
 		resetUser: resetUser(dispatch),
 	};
 
-	return <Provider value={{ state, ...actions }}>{props.children}</Provider>;
+	return <Provider value={{ store, ...actions }}>{props.children}</Provider>;
 }
 
 export { useCtx as useAppContext, AppProvider };

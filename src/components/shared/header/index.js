@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
+import { useAppContext } from 'providers/AppProvider';
 
 import { SideMenu } from 'shared';
 
@@ -14,6 +15,8 @@ const LeftButtons = ({
 	handleBackPress,
 	back,
 	navigation,
+	plan,
+	tockens,
 }) => (
 	<View
 		style={{
@@ -94,7 +97,7 @@ const LeftButtons = ({
 							marginLeft: 6,
 						}}
 					>
-						Silver
+						{plan}
 					</Text>
 				</TouchableWithoutFeedback>
 			</View>
@@ -110,7 +113,7 @@ const LeftButtons = ({
 			>
 				<Image style={{ marginRight: 4 }} source={require('icons/coin.png')} />
 				<Text style={{ fontSize: 20, color: '#FBDC42', fontWeight: '900' }}>
-					64
+					{tockens || 0}
 				</Text>
 			</View>
 		</View>
@@ -118,6 +121,8 @@ const LeftButtons = ({
 );
 
 const HomeHeader = ({ screenTitle, componentId, back, navigation }) => {
+	const { store } = useAppContext();
+	const { user } = store;
 	const [isOpen, setModalState] = useState(false);
 	const handleModalState = () => setModalState(!isOpen);
 
@@ -145,6 +150,8 @@ const HomeHeader = ({ screenTitle, componentId, back, navigation }) => {
 						// handleBackPress={handleBackPress}
 						back={back}
 						navigation={navigation}
+						tockens={user.tockens}
+						plan={user.plan}
 					/>
 				</View>
 			</LinearGradient>
