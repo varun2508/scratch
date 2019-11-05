@@ -1,5 +1,11 @@
 import React, { useEffect } from 'react';
-import { Image, View } from 'react-native';
+import {
+	Image,
+	View,
+	TouchableOpacity,
+	Text,
+	TouchableWithoutFeedback,
+} from 'react-native';
 import {
 	NavigationParams,
 	NavigationScreenProp,
@@ -18,7 +24,7 @@ import { User } from '../../types';
 import { useThemeContext } from '../../../providers/ThemeProvider';
 import { updateTockens } from '../../../apis/user';
 // import { getUserById } from '../../../apis/auth';
-
+import * as Animatable from 'react-native-animatable';
 const Container = styled.View`
 	flex: 1;
 	align-self: stretch;
@@ -31,12 +37,12 @@ const Container = styled.View`
 	overflow: hidden;
 `;
 
-const ContentWrapper = styled.View`
-	flex-direction: column;
-	height: 100%;
-	width: 100%;
-	justify-content: flex-start;
-	align-items: center;
+const AnimationContainer = styled.View`
+	flex-direction: row;
+	width: 90%;
+	justify-content: flex-end;
+	margin-right: 60;
+	margin-top: -20px;
 `;
 
 const GameContainer = styled.View`
@@ -76,6 +82,8 @@ function GameScreen(props: Props): React.ReactElement {
 	const { store, getMe, setUser } = useAppContext();
 	const { changeThemeType } = useThemeContext();
 	const [scrollEnabled, setScrollEnabled] = React.useState<boolean>(false);
+	const [fontSize, setFontSize] = React.useState<number>(5);
+
 	const [winState, setWinState] = React.useState<string>('notTouched');
 	const imageUrl =
 		'https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/hitItBig/';
@@ -83,7 +91,48 @@ function GameScreen(props: Props): React.ReactElement {
 	const results = [[], [], [], [], [], []];
 	let winCategory;
 	const { user } = store;
+	const handleViewRef = (ref) => (view = ref);
 
+	const bounce = () =>
+		view
+			.animate({
+				// from: {
+				// 	opacity: 1,
+				// 	translateY: 0,
+				// },
+				// to: {
+				// 	opacity: 0,
+				// 	translateY: -100,
+				// },
+
+				0: {
+					scale: 0,
+					opacity: 0,
+					translateY: 0,
+					color: '#FBDC42',
+				},
+				0.2: {
+					scale: 0,
+					opacity: 1,
+					translateY: 0,
+					color: '#FBDC42',
+				},
+				0.5: {
+					scale: 5,
+					opacity: 0.5,
+					translateY: -20,
+					color: '#FBDC42',
+				},
+				1: {
+					scale: 1,
+					opacity: 0,
+					translateY: -30,
+					color: '#FBDC42',
+				},
+			})
+			.then((endState) =>
+				console.log(endState.finished ? 'bounce finished' : 'bounce cancelled'),
+			);
 	const setCategory = () => {
 		for (let index = 0; index < 6; index++) {
 			const category = Math.floor(Math.random() * 6 + 1);
@@ -139,6 +188,7 @@ function GameScreen(props: Props): React.ReactElement {
 
 		if (userWins) {
 			setWinState('win');
+			bounce();
 			updatedUser = await updateTockens({
 				userId: user.id,
 				tockens: user.tockens + 50,
@@ -147,12 +197,12 @@ function GameScreen(props: Props): React.ReactElement {
 			getMe(updatedUser);
 		} else {
 			setWinState('loosed');
+			bounce();
 			updatedUser = await updateTockens({
 				userId: user.id,
 				tockens: user.tockens + 10,
 			});
 			console.log('----------before getupdatedUser', updatedUser);
-
 			getMe(updatedUser);
 		}
 	};
@@ -250,13 +300,21 @@ function GameScreen(props: Props): React.ReactElement {
 	return (
 		<View>
 			<Header back screenTitle='Play & Win!' navigation={props.navigation} />
-
+			<AnimationContainer>
+				<Animatable.Text
+					ref={handleViewRef}
+					duration={3000}
+					style={{ color: '#FFF', fontWeight: '900' }}
+				>
+					+50
+				</Animatable.Text>
+			</AnimationContainer>
 			<GameHeader imgSource={'image/image.png'} title={'Hit it Big'} />
+
 			{winState === 'notTouched' && <ScratchGame />}
 			{winState !== 'notTouched' && (
 				<Results navigation={props.navigation} winState={winState} />
 			)}
-
 			<Instructions winState={winState} />
 			<View>
 				<Add style={{ borderWidth: 2, borderColor: 'red' }} />

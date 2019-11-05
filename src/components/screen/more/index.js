@@ -10,12 +10,14 @@ import {
 	TouchableWithoutFeedback,
 	Image,
 } from 'react-native';
+
 import styled from 'styled-components';
 import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
 } from 'react-navigation';
+import * as Animatable from 'react-native-animatable';
 import {
 	getCurrentUser,
 	getUserById,
