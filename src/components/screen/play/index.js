@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Image, Text } from 'react-native';
 import { Header, Add } from 'shared';
 import ScreenFooter from 'shared/footer/index';
 import styled from 'styled-components';
@@ -20,6 +20,7 @@ class PlayScreen extends React.Component {
 			},
 		};
 	}
+
 	state = {
 		scrollEnabled: false,
 	};
@@ -50,6 +51,12 @@ class PlayScreen extends React.Component {
 													resizeMode={'contain'}
 													source={require('image/image.png')}
 												/>
+												<CostViewContainer>
+													<CostView>
+														<CostIcon source={require('icons/coin.png')} />
+														<CostAmountText>{30}</CostAmountText>
+													</CostView>
+												</CostViewContainer>
 											</BigImageContainer>
 											<TwoSmallGameContainer>
 												<SmallImageContainer
@@ -61,6 +68,12 @@ class PlayScreen extends React.Component {
 														resizeMode={'stretch'}
 														source={require('image/image-9.png')}
 													/>
+													<CostViewContainer>
+														<CostView>
+															<CostIcon source={require('icons/coin.png')} />
+															<CostAmountText>{30}</CostAmountText>
+														</CostView>
+													</CostViewContainer>
 												</SmallImageContainer>
 												<SmallImageContainer
 													onPress={() =>
@@ -71,6 +84,12 @@ class PlayScreen extends React.Component {
 														resizeMode={'stretch'}
 														source={require('image/image-8.png')}
 													/>
+													<CostViewContainer>
+														<CostView>
+															<CostIcon source={require('icons/coin.png')} />
+															<CostAmountText>{30}</CostAmountText>
+														</CostView>
+													</CostViewContainer>
 												</SmallImageContainer>
 											</TwoSmallGameContainer>
 										</BigOnTopContainer>
@@ -97,6 +116,12 @@ class PlayScreen extends React.Component {
 													resizeMode={'stretch'}
 													source={require('image/image-6.png')}
 												/>
+												<CostViewContainer>
+													<CostView>
+														<CostIcon source={require('icons/coin.png')} />
+														<CostAmountText>{30}</CostAmountText>
+													</CostView>
+												</CostViewContainer>
 											</SmallImageContainer>
 											<SmallImageContainer
 												onPress={() =>
@@ -107,6 +132,12 @@ class PlayScreen extends React.Component {
 													resizeMode={'stretch'}
 													source={require('image/image-3.png')}
 												/>
+												<CostViewContainer>
+													<CostView>
+														<CostIcon source={require('icons/coin.png')} />
+														<CostAmountText>{30}</CostAmountText>
+													</CostView>
+												</CostViewContainer>
 											</SmallImageContainer>
 										</TwoSmallGameContainer>
 									</Carusel2>
@@ -122,7 +153,6 @@ class PlayScreen extends React.Component {
 	}
 }
 
-const Item = styled.Text``;
 const BigOnTopContainer = styled.View`
 	display: flex;
 `;
@@ -157,6 +187,29 @@ const BigImage = styled.Image`
 	width: 190px;
 	height: 142px;
 	border-radius: 3px;
+`;
+
+const CostViewContainer = styled.View`
+	position: absolute;
+	bottom: 3;
+	right: 7;
+`;
+
+const CostView = styled.View`
+	display: flex;
+	flex-direction: row;
+`;
+
+const CostIcon = styled.Image`
+	margin-left: 10px;
+	margin-top: 8px;
+	margin-right: 4px;
+`;
+
+const CostAmountText = styled.Text`
+	font-size: 20px;
+	color: #fbdc42;
+	font-weight: 900;
 `;
 
 const SmallImage = styled.Image`

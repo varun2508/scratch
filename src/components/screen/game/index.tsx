@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { Image, View } from 'react-native';
 import {
 	NavigationParams,
@@ -9,7 +10,6 @@ import GameHeader from './GameHeader';
 // import { getString } from '../../../STRINGS';
 import { Header } from '../../shared';
 import Instructions from './Instructions';
-import React from 'react';
 import Results from './Results';
 import ScratchView from 'react-native-scratch';
 import styled from 'styled-components/native';
@@ -71,39 +71,49 @@ interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
-const images = {
-	1: require('../../../assets/icons/gameElements/1.png'),
-	2: require('../../../assets/icons/gameElements/2.png'),
-	3: require('../../../assets/icons/gameElements/3.png'),
-	4: require('../../../assets/icons/gameElements/4.png'),
-	5: require('../../../assets/icons/gameElements/5.png'),
-	6: require('../../../assets/icons/gameElements/6.png'),
-	7: require('../../../assets/icons/gameElements/7.png'),
-	8: require('../../../assets/icons/gameElements/8.png'),
-	9: require('../../../assets/icons/gameElements/9.png'),
-	10: require('../../../assets/icons/gameElements/10.png'),
-};
-
 function GameScreen(props: Props): React.ReactElement {
 	let timer: number;
-	const { store, getMe } = useAppContext();
+	const { store, getMe, setUser } = useAppContext();
 	const { changeThemeType } = useThemeContext();
 	const [scrollEnabled, setScrollEnabled] = React.useState<boolean>(false);
 	const [winState, setWinState] = React.useState<string>('notTouched');
-
+	const imageUrl =
+		'https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/hitItBig/';
+	const imageOrder = [];
 	const results = [[], [], [], [], [], []];
+	let winCategory;
+	const { user } = store;
 
 	const setCategory = () => {
-		const category = Math.floor(Math.random() * 6 + 1);
-		results[category - 1].push('match');
-		console.log('-----results-----', category, results);
-		return category;
+		for (let index = 0; index < 6; index++) {
+			const category = Math.floor(Math.random() * 6 + 1);
+			results[category - 1].push(category);
+			imageOrder.push(category);
+			console.log('-----results-----', category);
+			console.log('-----imageOrder-----', imageOrder);
+		}
+		console.log('-----results-----', results);
+		results.forEach((elem, i) => {
+			if (elem.length > 2) {
+				winCategory = i + 1;
+			}
+		});
+
+		console.log('----winCategory------', winCategory);
 	};
-	const imageSelect = (category) => {
-		console.log('-------imageSelect cate---', category, images[category]);
-		return images[category];
+	const takeGameCost = async () => {
+		const updatedUser = await updateTockens({
+			userId: user.id,
+			tockens: user.tockens - 30,
+		});
+		// setUser(updatedUser);
 	};
-	const onImageLoadFinished = ({ id, success }): void => {
+
+	useEffect(() => {
+		takeGameCost();
+	}, []);
+
+	const onImageLoadFinished = async ({ id, success }): void => {
 		// Do something
 		console.log('-----image load finished', id, success);
 	};
@@ -115,7 +125,7 @@ function GameScreen(props: Props): React.ReactElement {
 
 	const onScratchDone = async ({ isScratchDone, id }): Promise<void> => {
 		// Do something
-		const { user } = store;
+		// const { user } = store;
 
 		console.log('-----onScratchDone-----', isScratchDone, id, user);
 
@@ -154,16 +164,28 @@ function GameScreen(props: Props): React.ReactElement {
 		console.log('------onScratchTouchStateChanged----', touchState, id);
 	};
 
-	const GameElement = (): React.ReactElement => (
-		<Image
-			style={{
-				marginRight: 5,
-				marginBottom: 5,
-				borderRadius: 5,
-			}}
-			source={imageSelect(setCategory())}
-		/>
-	);
+	const GameElement = ({ order }): React.ReactElement => {
+		if (order === 1) {
+			setCategory();
+		}
+		return (
+			<Image
+				style={{
+					marginRight: 5,
+					marginBottom: 5,
+					borderRadius: 5,
+					height: '70%',
+					width: '70%',
+					resizeMode: 'stretch',
+				}}
+				source={{
+					uri: `${imageUrl}${imageOrder[order - 1]}${
+						winCategory === imageOrder[order - 1] ? '' : '-grey'
+					}.png`,
+				}}
+			/>
+		);
+	};
 
 	const ScratchGame = (): React.ReactElement => (
 		<View style={{ margin: 10 }}>
@@ -177,13 +199,13 @@ function GameScreen(props: Props): React.ReactElement {
 					}}
 				>
 					<GameElementContainer>
-						<GameElement />
+						<GameElement order={1} />
 					</GameElementContainer>
 					<GameElementContainer>
-						<GameElement />
+						<GameElement order={2} />
 					</GameElementContainer>
 					<GameElementContainer>
-						<GameElement />
+						<GameElement order={3} />
 					</GameElementContainer>
 				</View>
 
@@ -197,13 +219,13 @@ function GameScreen(props: Props): React.ReactElement {
 					}}
 				>
 					<GameElementContainer>
-						<GameElement />
+						<GameElement order={4} />
 					</GameElementContainer>
 					<GameElementContainer>
-						<GameElement />
+						<GameElement order={5} />
 					</GameElementContainer>
 					<GameElementContainer>
-						<GameElement />
+						<GameElement order={6} />
 					</GameElementContainer>
 				</View>
 			</GameContainer>

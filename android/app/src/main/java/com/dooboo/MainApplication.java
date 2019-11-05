@@ -1,4 +1,4 @@
-package com.dooboo;
+package com.scratchandwin;
 
 import android.app.Application;
 import android.content.Context;

@@ -62,7 +62,7 @@ function Intro(props: Props): React.ReactElement {
 		setIsLoggingIn(true);
 		timer = setTimeout(() => {
 			const user: User = {
-				displayName: 'dooboolab',
+				displayName: 'scratchandwin',
 			};
 			// dispatch({ type: 'set-user', payload: { user: user } });
 			setUser(user);

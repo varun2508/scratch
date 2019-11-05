@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'dooboo' do
-  # Pods for dooboo
+target 'scratchandwin' do
+  # Pods for scratchandwin
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -35,7 +35,7 @@ target 'dooboo' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-  target 'doobooTests' do
+  target 'scratchandwinTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -43,10 +43,10 @@ target 'dooboo' do
   use_native_modules!
 end
 
-target 'dooboo-tvOS' do
-  # Pods for dooboo-tvOS
+target 'scratchandwin-tvOS' do
+  # Pods for scratchandwin-tvOS
 
-  target 'dooboo-tvOSTests' do
+  target 'scratchandwin-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

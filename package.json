@@ -22,8 +22,6 @@
 		"ios": "node node_modules/react-native/local-cli/cli.js run-ios",
 		"ios:release": "node node_modules/react-native/local-cli/cli.js run-ios --configuration Release",
 		"ios:devices": "xcrun simctl list devices",
-		"ios:dooboolab": "node node_modules/react-native/local-cli/cli.js run-ios --device 'dooboolab'",
-		"ios:dooboolab-release": "node node_modules/react-native/local-cli/cli.js run-ios --configuration Release --device 'dooboolab'",
 		"ios:iphone5": "node node_modules/react-native/local-cli/cli.js run-ios  --simulator='iPhone 5s'",
 		"ios:iphone7": "node node_modules/react-native/local-cli/cli.js run-ios  --simulator='iPhone 7'",
 		"ios:reset": "rm -rf ios/build/ModuleCache",
