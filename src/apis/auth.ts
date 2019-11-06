@@ -154,10 +154,13 @@ export const getCurrentUser = async (): Promise<Response> => {
 };
 
 export const updateUser = async (body: object): Promise<Response> => {
+	const token = await AsyncStorage.getItem('scratchToken');
+
 	const fetchOption: RequestInit = {
 		method: 'PUT',
 		headers: new Headers({
 			'Content-Type': 'application/json',
+			Authorization: `${token}`,
 		}),
 		body: JSON.stringify(body),
 	};

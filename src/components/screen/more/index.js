@@ -224,15 +224,6 @@ function MoreScreen(props) {
 									value={state.newPassword}
 								/>
 							</View>
-							<Image
-								source={{ uri: 'https://reactjs.org/logo-og.png' }}
-								style={{
-									width: 40,
-									height: 40,
-									borderWidth: 2,
-									borderColor: 'red',
-								}}
-							/>
 							{state.isLoading ? (
 								<ActivityIndicator
 									size='large'

@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	KeyboardAvoidingView,
 	ActivityIndicator,
+	ScrollView,
 } from 'react-native';
 // import { TextInputProps } from "@types/react-native"
 import {
@@ -28,8 +29,8 @@ const styles = StyleSheet.create({
 	slideContainer: {
 		flex: 1,
 		display: 'flex',
-		// alignItems: "center",
 		justifyContent: 'center',
+		marginTop: '40%',
 	},
 	slide1: {
 		backgroundColor: '#FFF',
@@ -87,9 +88,8 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 			NavigationService.navigate('StatusScreen', {});
 		}
 	};
-
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<View style={styles.slideContainer}>
 				<KeyboardAvoidingView
 					keyboardVerticalOffset={20}
@@ -160,6 +160,7 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 							alignItems: 'center',
 							alignSelf: 'center',
 							marginTop: 24,
+							marginBottom: 24,
 						}}
 					>
 						<Text
@@ -174,8 +175,6 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 						display: 'flex',
 						flexDirection: 'row',
 						alignSelf: 'center',
-						position: 'absolute',
-						bottom: 60,
 					}}
 				>
 					<Text style={{ color: '#828282', fontWeight: 'bold', fontSize: 16 }}>
@@ -194,7 +193,7 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 					</TouchableOpacity>
 				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 }
 

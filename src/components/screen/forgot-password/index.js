@@ -137,8 +137,7 @@ class ForgotPasswordScreen extends React.Component {
 							display: 'flex',
 							flexDirection: 'row',
 							alignSelf: 'center',
-							position: 'absolute',
-							bottom: 60,
+							marginTop: 30,
 						}}
 					>
 						<Text

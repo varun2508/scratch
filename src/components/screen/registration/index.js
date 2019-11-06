@@ -8,6 +8,7 @@ import {
 	Alert,
 	TouchableOpacity,
 	KeyboardAvoidingView,
+	ScrollView,
 } from 'react-native';
 import { register } from '../../../apis/auth';
 import { emailValidation } from '../../../utils/validations';
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		display: 'flex',
 		justifyContent: 'center',
+		marginTop: '30%',
 	},
 	slide1: {
 		backgroundColor: '#FFF',
@@ -84,7 +86,13 @@ class RegistrationScreen extends React.Component {
 			return;
 		}
 		if (emailValidation(email)) {
-			register({ email, password, isActive: true, userType: 'client' });
+			register({
+				email,
+				password,
+				isActive: true,
+				userType: 'client',
+				tockens: 200,
+			});
 		} else {
 			Alert.alert('Please enter a valid email');
 		}
@@ -92,7 +100,7 @@ class RegistrationScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={styles.container}>
+			<ScrollView style={styles.container}>
 				<View style={styles.slideContainer}>
 					<KeyboardAvoidingView
 						keyboardVerticalOffset={20}
@@ -174,8 +182,7 @@ class RegistrationScreen extends React.Component {
 							display: 'flex',
 							flexDirection: 'row',
 							alignSelf: 'center',
-							position: 'absolute',
-							bottom: 60,
+							marginTop: 30,
 						}}
 					>
 						<Text
@@ -194,7 +201,7 @@ class RegistrationScreen extends React.Component {
 						</TouchableOpacity>
 					</View>
 				</View>
-			</View>
+			</ScrollView>
 		);
 	}
 }

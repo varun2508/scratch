@@ -243,3 +243,17 @@ NativeModules.ReactLocalization = {
 ### React navigation
 
 3
+
+Release notes: 06.11.19
+
+- added validation for email on login and register screen;
+- fixed views on login, register, status and forgot password screens (if content is to long it can be scrolled);
+- added sending email functionality;
+- created email template for forgot password;
+- added forgot password functionality (reset link is sent to gamer email that was used in registration, link is redirecting to server side page where gamer can change his password);
+- added change password functionality (from my profile when user is loged in);
+- put game icons in cloud (now we are receiving icons via request);
+- changet game view and functionality (added red highlithing for wining combination);
+- added animation for win loose results;
+- added tockens wallet for gamer (200 tockens from register - buy tockens functionality is not implimented yet);
+- added game costs functionality (-30 tockens for each game);

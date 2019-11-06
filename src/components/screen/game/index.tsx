@@ -4,12 +4,14 @@ import {
 	View,
 	TouchableOpacity,
 	Text,
-	TouchableWithoutFeedback,
+	ActivityIndicator,
+	Alert,
 } from 'react-native';
 import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
+	NavigationActions,
 } from 'react-navigation';
 import Add from '../../shared/add';
 import GameHeader from './GameHeader';
@@ -25,16 +27,13 @@ import { useThemeContext } from '../../../providers/ThemeProvider';
 import { updateTockens } from '../../../apis/user';
 // import { getUserById } from '../../../apis/auth';
 import * as Animatable from 'react-native-animatable';
-const Container = styled.View`
-	flex: 1;
-	align-self: stretch;
-	overflow: scroll;
-	background-color: ${({ theme }): string => theme.background};
-
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
-	overflow: hidden;
+const Loader = styled.View`
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background: transparent;
+	/* opacity: 0.2; */
+	z-index: 100;
 `;
 
 const AnimationContainer = styled.View`
@@ -81,8 +80,8 @@ function GameScreen(props: Props): React.ReactElement {
 	let timer: number;
 	const { store, getMe, setUser } = useAppContext();
 	const { changeThemeType } = useThemeContext();
-	const [scrollEnabled, setScrollEnabled] = React.useState<boolean>(false);
-	const [fontSize, setFontSize] = React.useState<number>(5);
+	const [isLoading, setIsLoading] = React.useState<boolean>(false);
+	const [differenceAmount, setDifferenceAmount] = React.useState<string>('');
 
 	const [winState, setWinState] = React.useState<string>('notTouched');
 	const imageUrl =
@@ -96,15 +95,6 @@ function GameScreen(props: Props): React.ReactElement {
 	const bounce = () =>
 		view
 			.animate({
-				// from: {
-				// 	opacity: 1,
-				// 	translateY: 0,
-				// },
-				// to: {
-				// 	opacity: 0,
-				// 	translateY: -100,
-				// },
-
 				0: {
 					scale: 0,
 					opacity: 0,
@@ -151,11 +141,21 @@ function GameScreen(props: Props): React.ReactElement {
 		console.log('----winCategory------', winCategory);
 	};
 	const takeGameCost = async () => {
+		setDifferenceAmount('-30');
+
+		setIsLoading(true);
+		if (user.tockens < 30) {
+			Alert.alert('You don`t have enough tockens!');
+			return props.navigation.navigate('StatusScreen', {});
+		}
 		const updatedUser = await updateTockens({
 			userId: user.id,
 			tockens: user.tockens - 30,
 		});
-		// setUser(updatedUser);
+		setUser(updatedUser);
+
+		bounce();
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
@@ -188,6 +188,7 @@ function GameScreen(props: Props): React.ReactElement {
 
 		if (userWins) {
 			setWinState('win');
+			setDifferenceAmount('+50');
 			bounce();
 			updatedUser = await updateTockens({
 				userId: user.id,
@@ -197,6 +198,8 @@ function GameScreen(props: Props): React.ReactElement {
 			getMe(updatedUser);
 		} else {
 			setWinState('loosed');
+			setDifferenceAmount('+10');
+
 			bounce();
 			updatedUser = await updateTockens({
 				userId: user.id,
@@ -306,10 +309,19 @@ function GameScreen(props: Props): React.ReactElement {
 					duration={3000}
 					style={{ color: '#FFF', fontWeight: '900' }}
 				>
-					+50
+					{differenceAmount}
 				</Animatable.Text>
 			</AnimationContainer>
 			<GameHeader imgSource={'image/image.png'} title={'Hit it Big'} />
+			{isLoading && (
+				<Loader>
+					<ActivityIndicator
+						style={{ marginTop: 'auto', marginBottom: 'auto' }}
+						size='large'
+						color='#fe5b3b'
+					/>
+				</Loader>
+			)}
 
 			{winState === 'notTouched' && <ScratchGame />}
 			{winState !== 'notTouched' && (

@@ -47,7 +47,7 @@ const StatusScreen = function(props: Props): React.ReactElement {
 		<View style={{ flex: 1 }}>
 			<Header screenTitle='My Balance' />
 			<Container>
-				<ScrollView>
+				<ScrollView style={{ marginBottom: 60 }}>
 					<Wrapper>
 						<OptionContainer>
 							<TextContainer>
@@ -228,7 +228,7 @@ const PointContainer = styled.View`
 	align-items: center;
 `;
 const Card = styled.View`
-	width: 164px;
+	width: 194px;
 	height: 76px;
 	border: 1px solid #e0e0e0;
 	margin-top: 8;
