@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import {
 	Image,
 	View,
@@ -6,27 +6,27 @@ import {
 	Text,
 	ActivityIndicator,
 	Alert,
-} from 'react-native';
+} from "react-native";
 import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
 	NavigationActions,
-} from 'react-navigation';
-import Add from '../../shared/add';
-import GameHeader from './GameHeader';
+} from "react-navigation";
+import Add from "../../shared/add";
+import GameHeader from "./GameHeader";
 // import { getString } from '../../../STRINGS';
-import { Header } from '../../shared';
-import Instructions from './Instructions';
-import Results from './Results';
-import ScratchView from 'react-native-scratch';
-import styled from 'styled-components/native';
-import { useAppContext } from '../../../providers/AppProvider';
-import { User } from '../../types';
-import { useThemeContext } from '../../../providers/ThemeProvider';
-import { updateTockens } from '../../../apis/user';
+import { Header } from "../../shared";
+import Instructions from "./Instructions";
+import Results from "./Results";
+import ScratchView from "react-native-scratch";
+import styled from "styled-components/native";
+import { useAppContext } from "../../../providers/AppProvider";
+import { User } from "../../types";
+import { useThemeContext } from "../../../providers/ThemeProvider";
+import { updateTockens } from "../../../apis/user";
 // import { getUserById } from '../../../apis/auth';
-import * as Animatable from 'react-native-animatable';
+import * as Animatable from "react-native-animatable";
 const Loader = styled.View`
 	position: absolute;
 	height: 100%;
@@ -81,11 +81,11 @@ function GameScreen(props: Props): React.ReactElement {
 	const { store, getMe, setUser } = useAppContext();
 	const { changeThemeType } = useThemeContext();
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
-	const [differenceAmount, setDifferenceAmount] = React.useState<string>('');
+	const [differenceAmount, setDifferenceAmount] = React.useState<string>("");
 
-	const [winState, setWinState] = React.useState<string>('notTouched');
+	const [winState, setWinState] = React.useState<string>("notTouched");
 	const imageUrl =
-		'https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/hitItBig/';
+		"https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/hitItBig/";
 	const imageOrder = [];
 	const results = [[], [], [], [], [], []];
 	let winCategory;
@@ -99,54 +99,54 @@ function GameScreen(props: Props): React.ReactElement {
 					scale: 0,
 					opacity: 0,
 					translateY: 0,
-					color: '#FBDC42',
+					color: "#FBDC42",
 				},
 				0.2: {
 					scale: 0,
 					opacity: 1,
 					translateY: 0,
-					color: '#FBDC42',
+					color: "#FBDC42",
 				},
 				0.5: {
 					scale: 5,
 					opacity: 0.5,
 					translateY: -20,
-					color: '#FBDC42',
+					color: "#FBDC42",
 				},
 				1: {
 					scale: 1,
 					opacity: 0,
 					translateY: -30,
-					color: '#FBDC42',
+					color: "#FBDC42",
 				},
 			})
 			.then((endState) =>
-				console.log(endState.finished ? 'bounce finished' : 'bounce cancelled'),
+				console.log(endState.finished ? "bounce finished" : "bounce cancelled")
 			);
 	const setCategory = () => {
 		for (let index = 0; index < 6; index++) {
 			const category = Math.floor(Math.random() * 6 + 1);
 			results[category - 1].push(category);
 			imageOrder.push(category);
-			console.log('-----results-----', category);
-			console.log('-----imageOrder-----', imageOrder);
+			console.log("-----results-----", category);
+			console.log("-----imageOrder-----", imageOrder);
 		}
-		console.log('-----results-----', results);
+		console.log("-----results-----", results);
 		results.forEach((elem, i) => {
 			if (elem.length > 2) {
 				winCategory = i + 1;
 			}
 		});
 
-		console.log('----winCategory------', winCategory);
+		console.log("----winCategory------", winCategory);
 	};
 	const takeGameCost = async () => {
-		setDifferenceAmount('-30');
+		setDifferenceAmount("-30");
 
 		setIsLoading(true);
 		if (user.tockens < 30) {
-			Alert.alert('You don`t have enough tockens!');
-			return props.navigation.navigate('StatusScreen', {});
+			Alert.alert("You don`t have enough tockens!");
+			return props.navigation.navigate("StatusScreen", {});
 		}
 		const updatedUser = await updateTockens({
 			userId: user.id,
@@ -164,7 +164,7 @@ function GameScreen(props: Props): React.ReactElement {
 
 	const onImageLoadFinished = async ({ id, success }): void => {
 		// Do something
-		console.log('-----image load finished', id, success);
+		console.log("-----image load finished", id, success);
 	};
 
 	const onScratchProgressChanged = ({ value, id }): void => {
@@ -176,7 +176,7 @@ function GameScreen(props: Props): React.ReactElement {
 		// Do something
 		// const { user } = store;
 
-		console.log('-----onScratchDone-----', isScratchDone, id, user);
+		console.log("-----onScratchDone---", isScratchDone, id, user);
 
 		let userWins = false;
 		let updatedUser;
@@ -187,25 +187,25 @@ function GameScreen(props: Props): React.ReactElement {
 		});
 
 		if (userWins) {
-			setWinState('win');
-			setDifferenceAmount('+50');
+			setWinState("win");
+			setDifferenceAmount("+50");
 			bounce();
 			updatedUser = await updateTockens({
 				userId: user.id,
 				tockens: user.tockens + 50,
 			});
-			console.log('----------before getupdatedUser', updatedUser);
+			console.log("----------before getupdatedUser", updatedUser);
 			getMe(updatedUser);
 		} else {
-			setWinState('loosed');
-			setDifferenceAmount('+10');
+			setWinState("loosed");
+			setDifferenceAmount("+5");
 
 			bounce();
 			updatedUser = await updateTockens({
 				userId: user.id,
-				tockens: user.tockens + 10,
+				tockens: user.tockens + 5,
 			});
-			console.log('----------before getupdatedUser', updatedUser);
+			console.log("----------before getupdatedUser", updatedUser);
 			getMe(updatedUser);
 		}
 	};
@@ -214,7 +214,7 @@ function GameScreen(props: Props): React.ReactElement {
 		// Example: change a state value to stop a containing
 		// FlatList from scrolling while scratching
 		// setScrollEnabled(!touchState);
-		console.log('------onScratchTouchStateChanged----', touchState, id);
+		console.log("------onScratchTouchStateChanged----", touchState, id);
 	};
 
 	const GameElement = ({ order }): React.ReactElement => {
@@ -227,13 +227,13 @@ function GameScreen(props: Props): React.ReactElement {
 					marginRight: 5,
 					marginBottom: 5,
 					borderRadius: 5,
-					height: '70%',
-					width: '70%',
-					resizeMode: 'stretch',
+					height: "70%",
+					width: "70%",
+					resizeMode: "stretch",
 				}}
 				source={{
 					uri: `${imageUrl}${imageOrder[order - 1]}${
-						winCategory === imageOrder[order - 1] ? '' : '-grey'
+						winCategory === imageOrder[order - 1] ? "" : "-grey"
 					}.png`,
 				}}
 			/>
@@ -245,10 +245,10 @@ function GameScreen(props: Props): React.ReactElement {
 			<GameContainer>
 				<View
 					style={{
-						width: '100%',
+						width: "100%",
 						height: 120,
-						flexDirection: 'row',
-						justifyContent: 'space-between',
+						flexDirection: "row",
+						justifyContent: "space-between",
 					}}
 				>
 					<GameElementContainer>
@@ -264,10 +264,10 @@ function GameScreen(props: Props): React.ReactElement {
 
 				<View
 					style={{
-						width: '100%',
+						width: "100%",
 						height: 120,
-						flexDirection: 'row',
-						justifyContent: 'space-between',
+						flexDirection: "row",
+						justifyContent: "space-between",
 						marginTop: 5,
 					}}
 				>
@@ -288,10 +288,10 @@ function GameScreen(props: Props): React.ReactElement {
 				brushSize={50} // Default is 10% of the smallest dimension (width/height)
 				threshold={50} // Report full scratch after 70 percentage, change as you see fit. Default is 50
 				fadeOut={true} // Disable the fade out animation when scratch is done. Default is true
-				placeholderColor='#AAAAAA' // Scratch color while image is loading (or while image not present)
+				placeholderColor="#AAAAAA" // Scratch color while image is loading (or while image not present)
 				// imageUrl={{ uri: 'scratch' }} // A url to your image (Optional)
-				resourceName={'scratch'} // An image resource name (without the extension like '.png/jpg etc') in the native bundle of the app (drawble for Android, Images.xcassets in iOS) (Optional)
-				resizeMode='cover|contain|stretch' // Resize the image to fit or fill the scratch view. Default is stretch
+				resourceName={"scratch"} // An image resource name (without the extension like '.png/jpg etc') in the native bundle of the app (drawble for Android, Images.xcassets in iOS) (Optional)
+				resizeMode="cover|contain|stretch" // Resize the image to fit or fill the scratch view. Default is stretch
 				onImageLoadFinished={onImageLoadFinished} // Event to indicate that the image has done loading
 				onTouchStateChanged={onScratchTouchStateChanged} // Touch event (to stop a containing FlatList for example)
 				onScratchProgressChanged={onScratchProgressChanged} // Scratch progress event while scratching
@@ -302,34 +302,34 @@ function GameScreen(props: Props): React.ReactElement {
 
 	return (
 		<View>
-			<Header back screenTitle='Play & Win!' navigation={props.navigation} />
+			<Header screenTitle="Play & Win!" />
 			<AnimationContainer>
 				<Animatable.Text
 					ref={handleViewRef}
 					duration={3000}
-					style={{ color: '#FFF', fontWeight: '900' }}
+					style={{ color: "#FFF", fontWeight: "900" }}
 				>
 					{differenceAmount}
 				</Animatable.Text>
 			</AnimationContainer>
-			<GameHeader imgSource={'image/image.png'} title={'Hit it Big'} />
+			<GameHeader imgSource={"image/image.png"} title={"Hit it Big"} />
 			{isLoading && (
 				<Loader>
 					<ActivityIndicator
-						style={{ marginTop: 'auto', marginBottom: 'auto' }}
-						size='large'
-						color='#fe5b3b'
+						style={{ marginTop: "auto", marginBottom: "auto" }}
+						size="large"
+						color="#fe5b3b"
 					/>
 				</Loader>
 			)}
 
-			{winState === 'notTouched' && <ScratchGame />}
-			{winState !== 'notTouched' && (
+			{winState === "notTouched" && <ScratchGame />}
+			{winState !== "notTouched" && (
 				<Results navigation={props.navigation} winState={winState} />
 			)}
 			<Instructions winState={winState} />
 			<View>
-				<Add style={{ borderWidth: 2, borderColor: 'red' }} />
+				<Add style={{ borderWidth: 2, borderColor: "red" }} />
 				{/* <ScreenFooter navigation={props.navigation} /> */}
 			</View>
 		</View>

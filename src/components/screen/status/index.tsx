@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
-} from 'react-navigation';
+} from "react-navigation";
 import {
 	View,
 	Image,
@@ -11,13 +11,13 @@ import {
 	ScrollView,
 	AsyncStorage,
 	ActivityIndicator,
-} from 'react-native';
-import styled from 'styled-components/native';
-import LinearGradient from 'react-native-linear-gradient';
-import ScreenFooter from '../../shared/footer/index';
-import { Header } from '../../shared';
-import { useAppContext } from '../../../providers/AppProvider';
-import { getUserById } from '../../../apis/auth';
+} from "react-native";
+import styled from "styled-components/native";
+import LinearGradient from "react-native-linear-gradient";
+import ScreenFooter from "../../shared/footer/index";
+import { Header } from "../../shared";
+import { useAppContext } from "../../../providers/AppProvider";
+import { getUserById } from "../../../apis/auth";
 
 interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -31,7 +31,7 @@ const StatusScreen = function(props: Props): React.ReactElement {
 	};
 
 	async function getUser(): Promise<void> {
-		const id = await AsyncStorage.getItem('scratchUserId');
+		const id = await AsyncStorage.getItem("scratchUserId");
 		const user = await getUserById(id);
 		setUser(user);
 	}
@@ -41,11 +41,11 @@ const StatusScreen = function(props: Props): React.ReactElement {
 
 	const { user } = store;
 	if (!user.email) {
-		return <ActivityIndicator size='large' color='#fe5b3b' />;
+		return <ActivityIndicator size="large" color="#fe5b3b" />;
 	}
 	return (
 		<View style={{ flex: 1 }}>
-			<Header screenTitle='My Balance' />
+			<Header screenTitle="My Balance" navigation={props.navigation} />
 			<Container>
 				<ScrollView style={{ marginBottom: 60 }}>
 					<Wrapper>
@@ -59,7 +59,7 @@ const StatusScreen = function(props: Props): React.ReactElement {
 									<PointContainer>
 										<Image
 											style={{ marginRight: 4 }}
-											source={require('icons/coin.png')}
+											source={require("icons/coin.png")}
 										/>
 										<Points>{user.tockens || 0}</Points>
 										<PointsText>Tockens</PointsText>
@@ -68,10 +68,10 @@ const StatusScreen = function(props: Props): React.ReactElement {
 								<ButtonContainer>
 									<TouchableWithoutFeedback
 										onPress={(): boolean =>
-											props.navigation.navigate('BuyTockens')
+											props.navigation.navigate("BuyTockens")
 										}
 									>
-										<Button>Buy more</Button>
+										<Button>BUY MORE</Button>
 									</TouchableWithoutFeedback>
 								</ButtonContainer>
 							</CardContaienr>
@@ -89,7 +89,7 @@ const StatusScreen = function(props: Props): React.ReactElement {
 									<PointContainer>
 										<Image
 											style={{ marginRight: 4 }}
-											source={require('icons/64.png')}
+											source={require("icons/64.png")}
 										/>
 										<Points>15</Points>
 										<PointsText>Tockens</PointsText>
@@ -97,41 +97,41 @@ const StatusScreen = function(props: Props): React.ReactElement {
 								</Card>
 								<ButtonContainer>
 									<TouchableWithoutFeedback>
-										<Button>Add funds</Button>
+										<Button>ADD FUNDS</Button>
 									</TouchableWithoutFeedback>
-									<TouchableWithoutFeedback>
-										<Button>Withdraw to bank</Button>
-									</TouchableWithoutFeedback>
+									{/* <TouchableWithoutFeedback>
+                    <Button>Withdraw to bank</Button>
+                  </TouchableWithoutFeedback> */}
 								</ButtonContainer>
 							</CardContaienr>
 						</OptionContainer>
 					</Wrapper>
-					<CardMD>
-						<LinearGradient
-							style={{ borderRadius: 5 }}
-							colors={['#D8341D', '#FE5B3B']}
-							start={{ x: 0.0, y: 0.25 }}
-							end={{ x: 0.5, y: 1.0 }}
-						>
-							<StatusContainer>
-								<StatusWrapper>
-									<Image
-										style={{ marginRight: 4 }}
-										source={require('icons/Vector.png')}
-									/>
-									<View>
-										<Text1>Your level</Text1>
-										<H1>Gold play</H1>
-									</View>
-								</StatusWrapper>
-								<Text2>
-									These 2 lines here explain how the status works and what it
-									helps to achieve.
-								</Text2>
-								<ButtonText>Upgrade now!</ButtonText>
-							</StatusContainer>
-						</LinearGradient>
-					</CardMD>
+					{/* <CardMD>
+            <LinearGradient
+              style={{ borderRadius: 5 }}
+              colors={['#D8341D', '#FE5B3B']}
+              start={{ x: 0.0, y: 0.25 }}
+              end={{ x: 0.5, y: 1.0 }}
+            >
+              <StatusContainer>
+                <StatusWrapper>
+                  <Image
+                    style={{ marginRight: 4 }}
+                    source={require('icons/Vector.png')}
+                  />
+                  <View>
+                    <Text1>Your level</Text1>
+                    <H1>Gold play</H1>
+                  </View>
+                </StatusWrapper>
+                <Text2>
+                  These 2 lines here explain how the status works and what it
+                  helps to achieve.
+                </Text2>
+                <ButtonText>Upgrade now!</ButtonText>
+              </StatusContainer>
+            </LinearGradient>
+          </CardMD> */}
 				</ScrollView>
 			</Container>
 			<ScreenFooter navigation={props.navigation} />

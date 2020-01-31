@@ -20,9 +20,10 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/components/screen/play/index.js",
+    "src/components/screen/play/index.tsx",
     "src/components/navigation/NavigationService.js",
-    "src/components/screen/more/index.js"
+    "src/components/screen/more/index.tsx",
+    "src/components/screen/buy-tokens/index.tsx"
   ],
   "exclude": ["node_modules", "**/*.test.tsx", "**/*.spec.ts"],
   "types": ["typePatches"],

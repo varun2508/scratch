@@ -1,10 +1,11 @@
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from "react-navigation-stack";
 
-import StatusScreen from '../screen/status';
-import PlayScreen from '../screen/play';
-import MoreScreen from '../screen/more';
-import BuyTockens from '../screen/buy-tokens';
-import GameScreen from '../screen/game';
+import StatusScreen from "../screen/status";
+import PlayScreen from "../screen/play";
+import MoreScreen from "../screen/more";
+import BuyTockens from "../screen/buy-tokens";
+import GameScreen from "../screen/game";
+import TermsAndPrivacy from "../screen/terms&Privacy";
 
 const routeConfig = {
 	StatusScreen: {
@@ -34,13 +35,16 @@ const routeConfig = {
 	GameScreen: {
 		screen: GameScreen,
 	},
+	TermsAndPrivacy: {
+		screen: TermsAndPrivacy,
+	},
 };
 
 const navigatorConfig = {
-	initialRouteName: 'StatusScreen',
+	initialRouteName: "StatusScreen",
 	// mode: 'card',
 	// headerMode: 'screen',
-	headerMode: 'none',
+	headerMode: "none",
 };
 
 const AppStackNavigator = createStackNavigator(routeConfig, navigatorConfig);

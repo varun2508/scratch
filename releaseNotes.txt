@@ -1,0 +1,8 @@
+- set new ammount of tockens that user gets after loose;
+- Changed game instructions  from “GET 3 SAME TO WIN” to “MATCH 3 ICONS TO WIN”;
+- removed – “Withdraw to Bank” button;
+- restyled “ADD FUNDS” and “BUY MORE” buttons;
+- removed "Level section" in status and balance screen;
+- removed "palan" indicator in the app header ("Silver");
+- restyled setting popUp (moved close button to top to fix --- 'Got stuck on this page. Unable to exist.');
+- Added two new option in setting popUp. User can navigate to FAQs and Terms and conditions screen by pressing new buttons;

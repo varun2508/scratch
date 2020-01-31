@@ -30,7 +30,7 @@ export function isEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-export const normalizeAmount = valueInp => {
+export const normalizeAmount = (valueInp) => {
   let value = valueInp;
 
   if (value) {
