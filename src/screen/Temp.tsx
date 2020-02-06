@@ -2,11 +2,11 @@ import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
-} from 'react-navigation';
+} from "react-navigation";
 
-import Button from '../shared/button';
-import React from 'react';
-import styled from 'styled-components/native';
+import Button from "../components/shared/button";
+import React from "react";
+import styled from "styled-components/native";
 
 const Container = styled.View`
 	flex: 1;
@@ -24,11 +24,11 @@ function Page(props: Props): React.ReactElement {
 	return (
 		<Container>
 			<Button
-				testID='btn'
+				testID="btn"
 				onClick={(): boolean => props.navigation.goBack()}
-				text='Go Back'
+				text="Go Back"
 				style={{
-					backgroundColor: '#333333',
+					backgroundColor: "#333333",
 				}}
 			/>
 		</Container>

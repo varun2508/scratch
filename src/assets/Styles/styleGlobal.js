@@ -99,7 +99,7 @@ export default {
 		fontFamily: styleConstants.font.bold,
 	},
 	colorPrimary: {
-		color: styleConstants.color.primary,
+		color: styleConstants.primary,
 	},
 	colorWhite: {
 		color: "white",

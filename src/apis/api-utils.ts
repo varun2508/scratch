@@ -71,8 +71,8 @@ const ApiUtils = {
 	},
 	/* eslint-enable */
 	// for localhost
-	// getRootUrl: () => 'http://10.0.2.2:3000/api',
-	getRootUrl: () => "https://scratchandwin.herokuapp.com/api",
+	getRootUrl: () => "http://10.0.2.2:3000/api",
+	// getRootUrl: () => "https://scratchandwin.herokuapp.com/api",
 
 	getImageUrl: () => "http://172.31.119.57:3000/api",
 };

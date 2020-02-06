@@ -13,23 +13,23 @@ import {
 	NavigationState,
 	NavigationActions,
 } from "react-navigation";
-import Add from "../../shared/add";
+import Add from "../../components/shared/add";
 import GameHeader from "./GameHeader";
 // import { getString } from '../../../STRINGS';
-import { Header } from "../../shared";
+import { Header } from "../../components/shared";
 import Instructions from "./Instructions";
 import Results from "./Results";
 import ScratchView from "react-native-scratch";
 import styled from "styled-components/native";
-import { useAppContext } from "../../../providers/AppProvider";
+import { useAppContext } from "../../providers/AppProvider";
 import { User } from "../../types";
-import { useThemeContext } from "../../../providers/ThemeProvider";
-import { updateTockens } from "../../../apis/user";
+import { useThemeContext } from "../../providers/ThemeProvider";
+import { updateTockens } from "../../apis/user";
 // import { getUserById } from '../../../apis/auth';
 import * as Animatable from "react-native-animatable";
 const Loader = styled.View`
 	position: absolute;
-	height: 100%;
+	height: 105%;
 	width: 100%;
 	background: transparent;
 	/* opacity: 0.2; */
@@ -128,8 +128,6 @@ function GameScreen(props: Props): React.ReactElement {
 			const category = Math.floor(Math.random() * 6 + 1);
 			results[category - 1].push(category);
 			imageOrder.push(category);
-			console.log("-----results-----", category);
-			console.log("-----imageOrder-----", imageOrder);
 		}
 		console.log("-----results-----", results);
 		results.forEach((elem, i) => {
@@ -137,8 +135,6 @@ function GameScreen(props: Props): React.ReactElement {
 				winCategory = i + 1;
 			}
 		});
-
-		console.log("----winCategory------", winCategory);
 	};
 	const takeGameCost = async () => {
 		setDifferenceAmount("-30");
@@ -193,17 +189,28 @@ function GameScreen(props: Props): React.ReactElement {
 			updatedUser = await updateTockens({
 				userId: user.id,
 				tockens: user.tockens + 50,
+				win: true,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				gameName: "Fruit saga",
+				date: new Date(),
+				amount: 50,
 			});
 			console.log("----------before getupdatedUser", updatedUser);
 			getMe(updatedUser);
 		} else {
 			setWinState("loosed");
 			setDifferenceAmount("+5");
-
 			bounce();
 			updatedUser = await updateTockens({
 				userId: user.id,
 				tockens: user.tockens + 5,
+				win: false,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				gameName: "Fruit saga",
+				date: new Date(),
+				amount: 5,
 			});
 			console.log("----------before getupdatedUser", updatedUser);
 			getMe(updatedUser);
@@ -302,7 +309,7 @@ function GameScreen(props: Props): React.ReactElement {
 
 	return (
 		<View>
-			<Header screenTitle="Play & Win!" />
+			<Header screenTitle="Play & Win!" navigation={props.navigation} />
 			<AnimationContainer>
 				<Animatable.Text
 					ref={handleViewRef}
@@ -316,7 +323,9 @@ function GameScreen(props: Props): React.ReactElement {
 			{isLoading && (
 				<Loader>
 					<ActivityIndicator
-						style={{ marginTop: "auto", marginBottom: "auto" }}
+						style={{
+							marginTop: "80%",
+						}}
 						size="large"
 						color="#fe5b3b"
 					/>

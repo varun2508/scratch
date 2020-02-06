@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
 	View,
 	Text,
@@ -9,59 +9,59 @@ import {
 	KeyboardAvoidingView,
 	ActivityIndicator,
 	ScrollView,
-} from 'react-native';
+} from "react-native";
 // import { TextInputProps } from "@types/react-native"
 import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
-} from 'react-navigation';
-import { login } from '../../../apis/auth';
-import NavigationService from '../../navigation/NavigationService';
+} from "react-navigation";
+import { login } from "../../apis/auth";
+import NavigationService from "../../components/navigation/NavigationService";
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		display: 'flex',
+		display: "flex",
 		paddingRight: 38,
 		paddingLeft: 38,
 	},
 	slideContainer: {
 		flex: 1,
-		display: 'flex',
-		justifyContent: 'center',
-		marginTop: '40%',
+		display: "flex",
+		justifyContent: "center",
+		marginTop: "40%",
 	},
 	slide1: {
-		backgroundColor: '#FFF',
+		backgroundColor: "#FFF",
 	},
 	slide2: {
-		backgroundColor: '#FFF',
+		backgroundColor: "#FFF",
 	},
 	slide3: {
-		backgroundColor: '#FFF',
+		backgroundColor: "#FFF",
 	},
 	textColor: {
-		color: '#4F4F4F',
+		color: "#4F4F4F",
 		fontSize: 14,
 	},
 	H1: {
-		fontWeight: 'bold',
+		fontWeight: "bold",
 		fontSize: 28,
-		color: '#4F4F4F',
+		color: "#4F4F4F",
 		marginBottom: 11,
 	},
 	input: {
 		height: 40,
 		borderBottomWidth: 1,
-		borderBottomColor: '#4F4F4F',
-		width: '100%',
+		borderBottomColor: "#4F4F4F",
+		width: "100%",
 		marginBottom: 12,
 		fontSize: 16,
-		textAlign: 'center',
-		justifyContent: 'center',
-		alignContent: 'center',
-		alignItems: 'center',
+		textAlign: "center",
+		justifyContent: "center",
+		alignContent: "center",
+		alignItems: "center",
 	},
 });
 interface Props {
@@ -69,8 +69,8 @@ interface Props {
 }
 
 function LoginScreen({ navigation }: Props): React.ReactElement {
-	const [email, setEmail] = React.useState<string>('');
-	const [password, setPassword] = React.useState<string>('');
+	const [email, setEmail] = React.useState<string>("");
+	const [password, setPassword] = React.useState<string>("");
 	const [loading, setIsLoading] = React.useState<boolean>(false);
 
 	const navigateTo = (screenName: string): void => {
@@ -85,7 +85,7 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 		});
 		setIsLoading(false);
 		if (!(resp instanceof Error)) {
-			NavigationService.navigate('StatusScreen', {});
+			NavigationService.navigate("StatusScreen", {});
 		}
 	};
 	return (
@@ -93,57 +93,57 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 			<View style={styles.slideContainer}>
 				<KeyboardAvoidingView
 					keyboardVerticalOffset={20}
-					behavior='padding'
+					behavior="padding"
 					enabled
 				>
 					<View
 						style={{
-							justifyContent: 'center',
-							display: 'flex',
-							alignItems: 'center',
+							justifyContent: "center",
+							display: "flex",
+							alignItems: "center",
 						}}
 					>
 						<Image
 							style={{ marginBottom: 24 }}
-							source={require('../../../assets/image/logo.png')}
+							source={require("../../assets/image/logo.png")}
 						/>
 						<Text style={styles.H1}>Sign In</Text>
 						<TextInput
 							style={styles.input}
 							onChangeText={(email: string): void => setEmail(email)}
 							value={email}
-							placeholder='Your email'
-							placeholderTextColor='#828282'
-							autoCapitalize='none'
+							placeholder="Your email"
+							placeholderTextColor="#828282"
+							autoCapitalize="none"
 						/>
 						<TextInput
-							placeholderTextColor='#828282'
+							placeholderTextColor="#828282"
 							style={styles.input}
 							onChangeText={(pass: string): void => setPassword(pass)}
-							placeholder='Password'
+							placeholder="Password"
 							secureTextEntry
 							value={password}
 						/>
 					</View>
 				</KeyboardAvoidingView>
 				{loading ? (
-					<ActivityIndicator size='large' color='#fe5b3b' />
+					<ActivityIndicator size="large" color="#fe5b3b" />
 				) : (
 					<TouchableOpacity onPress={handleSignIn}>
 						<View
 							style={{
-								backgroundColor: '#FBDC42',
+								backgroundColor: "#FBDC42",
 								borderRadius: 25,
 								width: 200,
 								height: 50,
-								justifyContent: 'center',
-								alignItems: 'center',
-								alignSelf: 'center',
+								justifyContent: "center",
+								alignItems: "center",
+								alignSelf: "center",
 								marginTop: 12,
 							}}
 						>
 							<Text
-								style={{ color: '#333333', fontSize: 16, fontWeight: 'bold' }}
+								style={{ color: "#333333", fontSize: 16, fontWeight: "bold" }}
 							>
 								Login
 							</Text>
@@ -152,19 +152,19 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 				)}
 
 				<TouchableOpacity
-					onPress={(): void => navigateTo('ForgotPasswordScreen')}
+					onPress={(): void => navigateTo("ForgotPasswordScreen")}
 				>
 					<View
 						style={{
-							justifyContent: 'center',
-							alignItems: 'center',
-							alignSelf: 'center',
+							justifyContent: "center",
+							alignItems: "center",
+							alignSelf: "center",
 							marginTop: 24,
 							marginBottom: 24,
 						}}
 					>
 						<Text
-							style={{ color: '#FE5B3B', fontSize: 16, fontWeight: 'bold' }}
+							style={{ color: "#FE5B3B", fontSize: 16, fontWeight: "bold" }}
 						>
 							Forgot password?
 						</Text>
@@ -172,20 +172,20 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 				</TouchableOpacity>
 				<View
 					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						alignSelf: 'center',
+						display: "flex",
+						flexDirection: "row",
+						alignSelf: "center",
 					}}
 				>
-					<Text style={{ color: '#828282', fontWeight: 'bold', fontSize: 16 }}>
-						New user?{'  '}
+					<Text style={{ color: "#828282", fontWeight: "bold", fontSize: 16 }}>
+						New user?{"  "}
 					</Text>
 					<TouchableOpacity
-						onPress={(): void => navigateTo('RegistrationScreen')}
+						onPress={(): void => navigateTo("RegistrationScreen")}
 					>
 						<View style={{}}>
 							<Text
-								style={{ color: '#FE5B3B', fontSize: 16, fontWeight: 'bold' }}
+								style={{ color: "#FE5B3B", fontSize: 16, fontWeight: "bold" }}
 							>
 								Register
 							</Text>

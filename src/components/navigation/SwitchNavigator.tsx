@@ -1,13 +1,11 @@
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-
-import React from 'react';
-import AuthStackNavigator from './AuthStackNavigator';
-import AppStackNavigator from './AppStackNavigator';
-import NavigationService from './NavigationService';
-
-import { Theme } from '../../theme';
-import AuthLoadingScreen from '../screen/authentificationLoading';
-import { useThemeContext } from '../../providers/ThemeProvider';
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import React from "react";
+import AuthStackNavigator from "./AuthStackNavigator";
+import AppStackNavigator from "./AppStackNavigator";
+import NavigationService from "./NavigationService";
+import { Theme } from "../../theme";
+import AuthLoadingScreen from "../../screen/authentificationLoading";
+import { useThemeContext } from "../../providers/ThemeProvider";
 
 const SwitchNavigator = createSwitchNavigator(
 	{
@@ -16,8 +14,8 @@ const SwitchNavigator = createSwitchNavigator(
 		Auth: AuthStackNavigator,
 	},
 	{
-		initialRouteName: 'AuthLoading',
-	},
+		initialRouteName: "AuthLoading",
+	}
 );
 
 const AppContainer = createAppContainer(SwitchNavigator);

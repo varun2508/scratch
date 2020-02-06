@@ -14,10 +14,10 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import LinearGradient from "react-native-linear-gradient";
-import ScreenFooter from "../../shared/footer/index";
-import { Header } from "../../shared";
-import { useAppContext } from "../../../providers/AppProvider";
-import { getUserById } from "../../../apis/auth";
+import ScreenFooter from "../../components/shared/footer/index";
+import { Header } from "../../components/shared";
+import { useAppContext } from "../../providers/AppProvider";
+import { getUserById } from "../../apis/auth";
 
 interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -139,46 +139,12 @@ const StatusScreen = function(props: Props): React.ReactElement {
 	);
 };
 
-const Text2 = styled.Text`
-	font-weight: normal;
-	font-size: 13px;
-	line-height: 16px;
-	color: #fff;
-	margin-top: 4px;
-`;
-const ButtonText = styled.Text`
-	font-weight: 500;
-	font-size: 16px;
-	line-height: 24px;
-	position: absolute;
-	color: #ffffff;
-	left: 16;
-	bottom: 16;
-`;
-const CardMD = styled.View`
-	margin-top: 16px;
-`;
-
-const H1 = styled.Text`
-	font-weight: bold;
-	font-size: 28px;
-	color: #ffffff;
-`;
-const Text1 = styled.Text`
-	font-weight: bold;
-	font-size: 14px;
-	line-height: 20px;
-	color: #ffb790;
-`;
 const Container = styled.View`
 	flex: 1;
 	padding-left: 17;
 	padding-right: 17;
 `;
-const StatusWrapper = styled.View`
-	flex-direction: row;
-	align-items: center;
-`;
+
 const Wrapper = styled.View`
 	border-bottom-width: 1px;
 	border-bottom-color: #c6c6c9;
@@ -243,12 +209,5 @@ const Card = styled.View`
 const OptionContainer = styled.View`
 	margin-top: 16px;
 `;
-const StatusContainer = styled.View`
-	height: 166px;
-	border-radius: 5px;
-	padding-left: 16;
-	padding-right: 16;
-	padding-top: 20;
-	padding-bottom: 16px;
-`;
+
 export default StatusScreen;

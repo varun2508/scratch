@@ -15,18 +15,15 @@ import { useAppContext } from "providers/AppProvider";
 import { SideMenu } from "../../shared";
 interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+	screenTitle: string;
+	componentId: number;
+	back(): void;
 }
 type LeftButtonsProps = {
 	screenTitle: string;
 	tockens: number;
 	handleModalState: boolean;
 	handleBackPress(): void;
-};
-
-type HomeHeaderProps = {
-	screenTitle: string;
-	componentId: number;
-	back(): void;
 };
 
 const LeftButtons: FunctionComponent<LeftButtonsProps> = ({
@@ -138,7 +135,7 @@ const LeftButtons: FunctionComponent<LeftButtonsProps> = ({
 						>
 							<Image
 								style={{ marginRight: 4 }}
-								source={require("icons/coin.png")}
+								source={require("icons/yellowcoin.png")}
 							/>
 							<Text
 								style={{ fontSize: 20, color: "#FBDC42", fontWeight: "900" }}
@@ -173,13 +170,13 @@ const HomeHeader = ({
 	componentId,
 	back,
 	navigation,
-}: HomeHeaderProps): FunctionComponent => {
+}: Props): FunctionComponent => {
 	const { store } = useAppContext();
 	const { user } = store;
 	const [isOpen, setModalState] = useState(false);
 	const handleModalState = () => setModalState(!isOpen);
 
-	// const handleBackPress = () => navigation(componentId);
+	//  const handleBackPress = () => navigation(componentId);
 
 	return (
 		<View style={{ display: "flex", height: 110 }}>

@@ -23,13 +23,13 @@ const blackList = [
 		title: "My play history",
 		icon: "history",
 		type: "font-awesome",
-		goTo: "MyHistoryScreen",
+		goTo: "MyHistory",
 	},
 	{
 		title: "Weekly winners",
 		icon: "calendar",
 		type: "feather",
-		goTo: "WeeklyWinnersScreen",
+		goTo: "WeeklyWinners",
 	},
 	{
 		title: "Help",
@@ -79,7 +79,7 @@ const helpSublist = [
 		title: "FAQs",
 		icon: "question",
 		type: "SimpleLineIcons",
-		goTo: "TermsAndPrivacy",
+		goTo: "FAQs",
 	},
 	{
 		title: "Terms & Privacy Policy",
@@ -98,11 +98,10 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 	const [helpOpened, handleHelpOpened] = useState(false);
 
 	const navigateTo = (screenName) => {
-		console.log("-__---screenName", screenName, navigation);
 		if (screenName === "logout") {
 			logout();
 		}
-
+		handleModalState();
 		navigation.navigate(screenName);
 	};
 

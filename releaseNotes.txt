@@ -6,3 +6,6 @@
 - removed "palan" indicator in the app header ("Silver");
 - restyled setting popUp (moved close button to top to fix --- 'Got stuck on this page. Unable to exist.');
 - Added two new option in setting popUp. User can navigate to FAQs and Terms and conditions screen by pressing new buttons;
+- Added FAQs screen;
+- Added Terms & Privacy screen with two tabs;
+- Added weekly winers screen;

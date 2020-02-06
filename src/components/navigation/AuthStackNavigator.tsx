@@ -1,9 +1,9 @@
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from "react-navigation-stack";
 
-import LoginScreen from '../screen/login';
-import RegistrationScreen from '../screen/registration';
-import ForgotPasswordScreen from '../screen/forgot-password';
-import StartPageScreen from '../screen/start-page';
+import LoginScreen from "../../screen/login";
+import RegistrationScreen from "../../screen/registration";
+import ForgotPasswordScreen from "../../screen/forgot-password";
+import StartPageScreen from "../../screen/start-page";
 const routeConfig = {
 	LoginScreen: {
 		screen: LoginScreen,
@@ -53,10 +53,10 @@ const routeConfig = {
 };
 
 const navigatorConfig = {
-	initialRouteName: 'StartPageScreen',
+	initialRouteName: "StartPageScreen",
 	// mode: 'card',
 	// headerMode: 'screen',
-	headerMode: 'none',
+	headerMode: "none",
 };
 
 const AuthStackNavigator = createStackNavigator(routeConfig, navigatorConfig);

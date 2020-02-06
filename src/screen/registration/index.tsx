@@ -10,8 +10,8 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-import { register } from '../../../apis/auth';
-import { emailValidation } from '../../../utils/validations';
+import { register } from '../../apis/auth';
+import { emailValidation } from '../../utils/validations';
 
 const styles = StyleSheet.create({
   container: {

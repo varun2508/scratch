@@ -2,17 +2,17 @@ import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
-} from 'react-navigation';
+} from "react-navigation";
 
-import Button from '../shared/button';
-import { IC_MASK } from '../../utils/Icons';
-import React from 'react';
-import { User } from '../../types';
-import { View } from 'react-native';
-import { getString } from '../../../STRINGS';
-import styled from 'styled-components/native';
-import { useAppContext } from '../../providers/AppProvider';
-import { useThemeContext } from '../../providers/ThemeProvider';
+import Button from "../components/shared/button";
+import { IC_MASK } from "../../utils/Icons";
+import React from "react";
+import { User } from "../types";
+import { View } from "react-native";
+import { getString } from "../../STRINGS";
+import styled from "styled-components/native";
+import { useAppContext } from "../providers/AppProvider";
+import { useThemeContext } from "../providers/ThemeProvider";
 
 const Container = styled.View`
 	flex: 1;
@@ -62,7 +62,7 @@ function Intro(props: Props): React.ReactElement {
 		setIsLoggingIn(true);
 		timer = setTimeout(() => {
 			const user: User = {
-				displayName: 'scratchandwin',
+				displayName: "scratchandwin",
 			};
 			// dispatch({ type: 'set-user', payload: { user: user } });
 			setUser(user);
@@ -79,30 +79,30 @@ function Intro(props: Props): React.ReactElement {
 						marginTop: 100,
 					}}
 				>
-					{state.user ? state.user.displayName : ''}
+					{state.user ? state.user.displayName : ""}
 				</StyledText>
-				<StyledText>{state.user ? state.user.age : ''}</StyledText>
-				<StyledText>{state.user ? state.user.job : ''}</StyledText>
+				<StyledText>{state.user ? state.user.age : ""}</StyledText>
+				<StyledText>{state.user ? state.user.job : ""}</StyledText>
 			</ContentWrapper>
 			<ButtonWrapper>
 				<Button
-					testID='btn1'
+					testID="btn1"
 					imgLeftSrc={IC_MASK}
 					isLoading={isLoggingIn}
 					onClick={(): void => onLogin()}
-					text={getString('LOGIN')}
+					text={getString("LOGIN")}
 				/>
 				<View style={{ marginTop: 8 }} />
 				<Button
-					testID='btn2'
-					onClick={(): boolean => props.navigation.navigate('Temp')}
-					text={getString('NAVIGATE')}
+					testID="btn2"
+					onClick={(): boolean => props.navigation.navigate("Temp")}
+					text={getString("NAVIGATE")}
 				/>
 				<View style={{ marginTop: 8 }} />
 				<Button
-					testID='btn3'
+					testID="btn3"
 					onClick={(): void => changeThemeType()}
-					text={getString('CHANGE_THEME')}
+					text={getString("CHANGE_THEME")}
 				/>
 			</ButtonWrapper>
 		</Container>

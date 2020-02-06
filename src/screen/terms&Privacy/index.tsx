@@ -1,13 +1,12 @@
 import React from "react";
 import { View, StyleSheet, Dimensions, Text } from "react-native";
 import styled from "styled-components/native";
-import ScreenFooter from "../../shared/footer/index";
-import { Header } from "../../shared";
+import ScreenFooter from "../../components/shared/footer/index";
+import { Header } from "../../components/shared";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import TermsAndConditions from "./components/terms";
 import Policy from "./components/policy";
-// import {  } from "../../../assets/Styles";
-import { sc } from "../../../assets/Styles/index";
+import { sc } from "../../assets/Styles/index";
 
 const initialLayout = { width: Dimensions.get("window").width };
 
@@ -24,7 +23,7 @@ const TermsAndPrivacy = function(props: Props): React.ReactElement {
 	});
 	return (
 		<View style={{ flex: 1 }}>
-			<Header screenTitle="Terms & Privacy" />
+			<Header screenTitle="Terms & Privacy" navigation={props.navigation} />
 			<Container>
 				<TabView
 					navigationState={{ index, routes }}

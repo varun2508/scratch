@@ -1,11 +1,14 @@
 import { createStackNavigator } from "react-navigation-stack";
 
-import StatusScreen from "../screen/status";
-import PlayScreen from "../screen/play";
-import MoreScreen from "../screen/more";
-import BuyTockens from "../screen/buy-tokens";
-import GameScreen from "../screen/game";
-import TermsAndPrivacy from "../screen/terms&Privacy";
+import StatusScreen from "../../screen/status";
+import PlayScreen from "../../screen/play";
+import MoreScreen from "../../screen/more";
+import BuyTockens from "../../screen/buy-tokens";
+import GameScreen from "../../screen/game";
+import TermsAndPrivacy from "../../screen/terms&Privacy";
+import FAQs from "../../screen/faq";
+import WeeklyWinners from "../../screen/weeklyWinners";
+import MyHistory from "../../screen/myHistory";
 
 const routeConfig = {
 	StatusScreen: {
@@ -37,6 +40,15 @@ const routeConfig = {
 	},
 	TermsAndPrivacy: {
 		screen: TermsAndPrivacy,
+	},
+	FAQs: {
+		screen: FAQs,
+	},
+	WeeklyWinners: {
+		screen: WeeklyWinners,
+	},
+	MyHistory: {
+		screen: MyHistory,
 	},
 };
 
