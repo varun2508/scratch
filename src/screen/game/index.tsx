@@ -1,17 +1,9 @@
 import React, { useEffect } from "react";
-import {
-	Image,
-	View,
-	TouchableOpacity,
-	Text,
-	ActivityIndicator,
-	Alert,
-} from "react-native";
+import { Image, View, ActivityIndicator, Alert } from "react-native";
 import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
-	NavigationActions,
 } from "react-navigation";
 import Add from "../../components/shared/add";
 import GameHeader from "./GameHeader";
@@ -22,9 +14,7 @@ import Results from "./Results";
 import ScratchView from "react-native-scratch";
 import styled from "styled-components/native";
 import { useAppContext } from "../../providers/AppProvider";
-import { User } from "../../types";
-import { useThemeContext } from "../../providers/ThemeProvider";
-import { updateTockens } from "../../apis/user";
+import { postGameResults, updateTockens } from "../../apis/user";
 // import { getUserById } from '../../../apis/auth';
 import * as Animatable from "react-native-animatable";
 const Loader = styled.View`
@@ -32,7 +22,6 @@ const Loader = styled.View`
 	height: 105%;
 	width: 100%;
 	background: transparent;
-	/* opacity: 0.2; */
 	z-index: 100;
 `;
 
@@ -58,34 +47,25 @@ const GameElementContainer = styled.View`
 	align-items: center;
 `;
 
-const ButtonWrapper = styled.View`
-	position: absolute;
-	flex-direction: column;
-	bottom: 40;
-	width: 85%;
-	align-self: center;
-`;
-
-const StyledText = styled.Text`
-	font-size: 18;
-	line-height: 27;
-	color: ${({ theme }): string => theme.fontColor};
-`;
-
 interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+	gameName: string;
 }
 
 function GameScreen(props: Props): React.ReactElement {
-	let timer: number;
 	const { store, getMe, setUser } = useAppContext();
-	const { changeThemeType } = useThemeContext();
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 	const [differenceAmount, setDifferenceAmount] = React.useState<string>("");
+	const {
+		gameName,
+		gameCost,
+		canWin,
+		gameLabel,
+		gameImage,
+	} = props.navigation.state.params;
 
 	const [winState, setWinState] = React.useState<string>("notTouched");
-	const imageUrl =
-		"https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/hitItBig/";
+	const imageUrl = `https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/${gameName}/`;
 	const imageOrder = [];
 	const results = [[], [], [], [], [], []];
 	let winCategory;
@@ -129,7 +109,6 @@ function GameScreen(props: Props): React.ReactElement {
 			results[category - 1].push(category);
 			imageOrder.push(category);
 		}
-		console.log("-----results-----", results);
 		results.forEach((elem, i) => {
 			if (elem.length > 2) {
 				winCategory = i + 1;
@@ -137,16 +116,16 @@ function GameScreen(props: Props): React.ReactElement {
 		});
 	};
 	const takeGameCost = async () => {
-		setDifferenceAmount("-30");
+		setDifferenceAmount(`-${gameCost}`);
 
 		setIsLoading(true);
-		if (user.tockens < 30) {
+		if (user.tockens < gameCost) {
 			Alert.alert("You don`t have enough tockens!");
 			return props.navigation.navigate("StatusScreen", {});
 		}
 		const updatedUser = await updateTockens({
 			userId: user.id,
-			tockens: user.tockens - 30,
+			tockens: user.tockens - gameCost,
 		});
 		setUser(updatedUser);
 
@@ -184,17 +163,18 @@ function GameScreen(props: Props): React.ReactElement {
 
 		if (userWins) {
 			setWinState("win");
-			setDifferenceAmount("+50");
+			setDifferenceAmount(`+${canWin}`);
 			bounce();
-			updatedUser = await updateTockens({
+			updatedUser = await postGameResults({
 				userId: user.id,
-				tockens: user.tockens + 50,
+				tockens: user.tockens + canWin,
 				win: true,
 				firstName: user.firstName,
 				lastName: user.lastName,
-				gameName: "Fruit saga",
+				gameName: gameLabel,
+				gameCost: gameCost,
 				date: new Date(),
-				amount: 50,
+				amount: canWin,
 			});
 			console.log("----------before getupdatedUser", updatedUser);
 			getMe(updatedUser);
@@ -202,13 +182,14 @@ function GameScreen(props: Props): React.ReactElement {
 			setWinState("loosed");
 			setDifferenceAmount("+5");
 			bounce();
-			updatedUser = await updateTockens({
+			updatedUser = await postGameResults({
 				userId: user.id,
 				tockens: user.tockens + 5,
 				win: false,
 				firstName: user.firstName,
 				lastName: user.lastName,
-				gameName: "Fruit saga",
+				gameName: gameLabel,
+				gameCost: gameCost,
 				date: new Date(),
 				amount: 5,
 			});
@@ -319,7 +300,7 @@ function GameScreen(props: Props): React.ReactElement {
 					{differenceAmount}
 				</Animatable.Text>
 			</AnimationContainer>
-			<GameHeader imgSource={"image/image.png"} title={"Hit it Big"} />
+			<GameHeader imgSource={gameImage} title={gameLabel} />
 			{isLoading && (
 				<Loader>
 					<ActivityIndicator

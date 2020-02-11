@@ -1,54 +1,115 @@
-import React from "react";
-import { View, ScrollView, Image, Text } from "react-native";
+import React, { useEffect } from "react";
+import { View, ScrollView, AsyncStorage } from "react-native";
 import { Header, Add } from "shared";
 import ScreenFooter from "shared/footer";
-import styled from "styled-components";
-const list = [1, 2, 3, 4, 5, 6, 7, 8];
+import styled from "styled-components/native";
+import { getNotifications } from "../../apis/notifications";
+import { useAppContext } from "../../providers/AppProvider";
 
-class PlayScreen extends React.Component {
-	state = {
-		scrollEnabled: false,
+const PlayScreen = function(props: Props): React.ReactElement {
+	const checkForNotification = async (): void => {
+		const { setNotifications } = useAppContext();
+		const id = await AsyncStorage.getItem("scratchUserId");
+		const notifications = await getNotifications(id);
+		setNotifications(notifications);
 	};
 
-	render() {
-		return (
-			<View style={{ flex: 1 }}>
-				<Header screenTitle="Game" navigation={this.props.navigation} />
-				<ScrollView>
-					<Container>
-						<Wrapper>
-							<Title>Featured</Title>
+	useEffect(() => {
+		checkForNotification();
+	}, []);
 
-							<ScrollView
-								showsHorizontalScrollIndicator={false}
-								horizontal
-								contentContainerStyle={{ paddingHorizontal: 20 }}
-							>
-								{list.map((item) => (
-									<Carusel key={item}>
-										<BigOnTopContainer>
-											<BigImageContainer
-												onPress={() =>
-													this.props.navigation.navigate("GameScreen")
-												}
-											>
-												<BigImage
-													resizeMode={"contain"}
-													source={require("image/image.png")}
-												/>
-												<CostViewContainer>
-													<CostView>
-														<CostIcon
-															source={require("icons/yellowcoin.png")}
-														/>
-														<CostAmountText>{30}</CostAmountText>
-													</CostView>
-												</CostViewContainer>
-											</BigImageContainer>
-											<TwoSmallGameContainer>
+	return (
+		<View style={{ flex: 1 }}>
+			<Header screenTitle="Game" navigation={props.navigation} />
+			<ScrollView>
+				<Container>
+					<Wrapper>
+						<Title>Featured</Title>
+
+						<ScrollView
+							showsHorizontalScrollIndicator={false}
+							horizontal
+							contentContainerStyle={{
+								paddingHorizontal: 20,
+								flex: 1,
+								justifyContent: "center",
+							}}
+						>
+							<Carusel>
+								<BigOnTopContainer>
+									<BigImageContainer
+										onPress={() =>
+											props.navigation.navigate("GameScreen", {
+												gameName: "hitItBig",
+												gameLabel: "Hit It Big",
+												gameCost: 30,
+												canWin: 50,
+												gameImage:
+													"https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/hitItBig/hitItBig.png",
+											})
+										}
+									>
+										<BigImage
+											resizeMode={"contain"}
+											source={require("image/hitItBig.png")}
+										/>
+										<CostViewContainer>
+											<CostView>
+												<CostIcon source={require("icons/yellowcoin.png")} />
+												<CostAmountText>{30}</CostAmountText>
+											</CostView>
+										</CostViewContainer>
+									</BigImageContainer>
+									<BigImageContainer
+										onPress={() =>
+											props.navigation.navigate("GameScreen", {
+												gameName: "candyBattle",
+												gameLabel: "Candy Battle",
+												gameCost: 20,
+												canWin: 40,
+												gameImage:
+													"https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/candyBattle/candy.png",
+											})
+										}
+									>
+										<BigImage
+											resizeMode={"contain"}
+											source={require("image/candy.png")}
+										/>
+										<CostViewContainer>
+											<CostView>
+												<CostIcon source={require("icons/yellowcoin.png")} />
+												<CostAmountText>{20}</CostAmountText>
+											</CostView>
+										</CostViewContainer>
+									</BigImageContainer>
+									<BigImageContainer
+										onPress={() =>
+											props.navigation.navigate("GameScreen", {
+												gameName: "extraJuicy",
+												gameLabel: "Extra Juicy",
+												gameCost: 40,
+												canWin: 60,
+												gameImage:
+													"https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/extraJuicy/extraJuicy.png",
+											})
+										}
+									>
+										<BigImage
+											resizeMode={"contain"}
+											source={require("image/extraJuicy.png")}
+										/>
+										<CostViewContainer>
+											<CostView>
+												<CostIcon source={require("icons/yellowcoin.png")} />
+												<CostAmountText>{40}</CostAmountText>
+											</CostView>
+										</CostViewContainer>
+									</BigImageContainer>
+									{/* <TwoSmallGameContainer>
 												<SmallImageContainer
 													onPress={() =>
-														this.props.navigation.navigate("GameScreen")
+														props.navigation.navigate("GameScreen")
 													}
 												>
 													<SmallImage
@@ -66,7 +127,7 @@ class PlayScreen extends React.Component {
 												</SmallImageContainer>
 												<SmallImageContainer
 													onPress={() =>
-														this.props.navigation.navigate("GameScreen")
+														props.navigation.navigate("GameScreen")
 													}
 												>
 													<SmallImage
@@ -82,74 +143,82 @@ class PlayScreen extends React.Component {
 														</CostView>
 													</CostViewContainer>
 												</SmallImageContainer>
-											</TwoSmallGameContainer>
-										</BigOnTopContainer>
-									</Carusel>
-								))}
-							</ScrollView>
-						</Wrapper>
-						<View>
-							<Title>Top winning this week</Title>
-							<ScrollView
-								showsHorizontalScrollIndicator={false}
-								horizontal
-								contentContainerStyle={{ paddingHorizontal: 20 }}
-							>
-								{list.map((item) => (
-									<Carusel2>
-										<TwoSmallGameContainer>
-											<SmallImageContainer
-												onPress={() =>
-													this.props.navigation.navigate("GameScreen")
-												}
-											>
-												<SmallImage
-													resizeMode={"stretch"}
-													source={require("image/image-6.png")}
-												/>
-												<CostViewContainer>
-													<CostView>
-														<CostIcon
-															source={require("icons/yellowcoin.png")}
-														/>
-														<CostAmountText>{30}</CostAmountText>
-													</CostView>
-												</CostViewContainer>
-											</SmallImageContainer>
-											<SmallImageContainer
-												onPress={() =>
-													this.props.navigation.navigate("GameScreen")
-												}
-											>
-												<SmallImage
-													resizeMode={"stretch"}
-													source={require("image/image-3.png")}
-												/>
-												<CostViewContainer>
-													<CostView>
-														<CostIcon
-															source={require("icons/yellowcoin.png")}
-														/>
-														<CostAmountText>{30}</CostAmountText>
-													</CostView>
-												</CostViewContainer>
-											</SmallImageContainer>
-										</TwoSmallGameContainer>
-									</Carusel2>
-								))}
-							</ScrollView>
-						</View>
-						<Add></Add>
-					</Container>
-				</ScrollView>
-				<ScreenFooter navigation={this.props.navigation} />
-			</View>
-		);
-	}
-}
+											</TwoSmallGameContainer> */}
+								</BigOnTopContainer>
+							</Carusel>
+						</ScrollView>
+					</Wrapper>
+					<View>
+						<Title>Top winning this week</Title>
+						<ScrollView
+							showsHorizontalScrollIndicator={false}
+							horizontal
+							contentContainerStyle={{ paddingHorizontal: 20 }}
+						>
+							<Carusel2>
+								<TwoSmallGameContainer>
+									<SmallImageContainer
+										onPress={() =>
+											props.navigation.navigate("GameScreen", {
+												gameName: "extraJuicy",
+												gameLabel: "Extra Juicy",
+												gameCost: 40,
+												canWin: 60,
+												gameImage:
+													"https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/extraJuicy/extraJuicy.png",
+											})
+										}
+									>
+										<SmallImage
+											resizeMode={"stretch"}
+											source={require("image/extraJuicy.png")}
+										/>
+										<CostViewContainer>
+											<CostViewSmallIcons>
+												<CostIcon source={require("icons/yellowcoin.png")} />
+												<CostAmountText>{40}</CostAmountText>
+											</CostViewSmallIcons>
+										</CostViewContainer>
+									</SmallImageContainer>
+									<SmallImageContainer
+										onPress={() =>
+											props.navigation.navigate("GameScreen", {
+												gameName: "hitItBig",
+												gameLabel: "Hit It Big",
+												gameCost: 30,
+												canWin: 50,
+												gameImage:
+													"https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/hitItBig/hitItBig.png",
+											})
+										}
+									>
+										<SmallImage
+											resizeMode={"stretch"}
+											source={require("image/hitItBig.png")}
+										/>
+										<CostViewContainer>
+											<CostViewSmallIcons>
+												<CostIcon source={require("icons/yellowcoin.png")} />
+												<CostAmountText>{30}</CostAmountText>
+											</CostViewSmallIcons>
+										</CostViewContainer>
+									</SmallImageContainer>
+								</TwoSmallGameContainer>
+							</Carusel2>
+						</ScrollView>
+					</View>
+					<Add></Add>
+				</Container>
+			</ScrollView>
+			<ScreenFooter navigation={props.navigation} />
+		</View>
+	);
+};
 
 const BigOnTopContainer = styled.View`
 	display: flex;
+	flex-direction: column;
+	justify-content: center;
 `;
 
 const Container = styled.View`
@@ -157,11 +226,13 @@ const Container = styled.View`
 `;
 const Wrapper = styled.View`
 	padding-top: 16px;
-	height: 300px;
+	/* height: 400px; */
+	justify-content: center;
 `;
 const BigImageContainer = styled.TouchableOpacity`
-	height: 142px;
-	margin-bottom: 5px;
+	height: 200px;
+	margin-bottom: 15px;
+	justify-content: center;
 `;
 
 const TwoSmallGameContainer = styled.TouchableOpacity`
@@ -173,26 +244,33 @@ const SmallImageContainer = styled.TouchableOpacity`
 `;
 
 const Carusel = styled.View`
-	width: 190px;
-	height: 384px;
+	width: 280px;
+	/* height: 400px; */
 	margin-right: 5px;
 `;
 
 const BigImage = styled.Image`
-	width: 190px;
-	height: 142px;
+	width: 275px;
+	height: 200px;
 	border-radius: 3px;
 `;
 
 const CostViewContainer = styled.View`
 	position: absolute;
 	bottom: 3;
-	right: 7;
+	right: 15;
 `;
 
 const CostView = styled.View`
 	display: flex;
 	flex-direction: row;
+`;
+
+const CostViewSmallIcons = styled.View`
+	display: flex;
+	flex-direction: row;
+	margin-right: -13px;
+	margin-bottom: -4px;
 `;
 
 const CostIcon = styled.Image`

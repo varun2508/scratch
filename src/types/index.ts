@@ -1,6 +1,6 @@
-import { StyleProp, TextStyle } from 'react-native';
+import { StyleProp, TextStyle } from "react-native";
 
-import { SFC } from 'react';
+import { SFC } from "react";
 
 export interface User {
 	firstName: string;
@@ -10,6 +10,10 @@ export interface User {
 	tockens: number;
 	plan: string;
 	id: string;
+}
+
+export interface Notifications {
+	data: object;
 }
 interface IconProps {
 	style?: StyleProp<TextStyle>;

@@ -1,8 +1,8 @@
-import { ImageSourcePropType, TextStyle, View } from 'react-native';
-import IconFt from 'react-native-vector-icons/Feather';
+import { ImageSourcePropType, TextStyle, View } from "react-native";
+import IconFt from "react-native-vector-icons/Feather";
 
-import React from 'react';
-import styled from 'styled-components/native';
+import React from "react";
+import styled from "styled-components/native";
 
 const HeaderContainer = styled.View`
 	flex-direction: row;
@@ -41,20 +41,20 @@ interface Props {
 function GameHeader(props: Props): React.ReactElement {
 	return (
 		<HeaderContainer>
-			<StyledImage source={require('image/image.png')} />
+			<StyledImage source={{ uri: props.imgSource }} />
 			<TitleContainer>
 				<StyledTitle style={props.textStyle}>{props.title}</StyledTitle>
 			</TitleContainer>
 			<IconContainer>
-				<IconFt size={25} color={'#df3b22'} name={'heart'}></IconFt>
+				{/* <IconFt size={25} color={"#df3b22"} name={"heart"}></IconFt> */}
 			</IconContainer>
 		</HeaderContainer>
 	);
 }
 
 GameHeader.defaultProps = {
-	title: '',
-	imgSource: '',
+	title: "",
+	imgSource: "",
 };
 
 export default GameHeader;

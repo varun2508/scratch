@@ -2,7 +2,7 @@ import React from "react";
 import { View, TouchableWithoutFeedback, Image } from "react-native";
 import styled from "styled-components/native";
 import { sc } from "../../../assets/Styles";
-import { Devider } from "../../../components/ui/Deviders";
+import { Devider } from "../../ui/Deviders";
 
 const Stats = function(props: Props): React.ReactElement {
 	return (
@@ -11,7 +11,7 @@ const Stats = function(props: Props): React.ReactElement {
 				<CardContaienr>
 					<Card>
 						<PointContainer>
-							<Points>62%</Points>
+							<Points>{Math.round(props.userWinRatio)}%</Points>
 							<PointsText>My win ratio</PointsText>
 						</PointContainer>
 					</Card>

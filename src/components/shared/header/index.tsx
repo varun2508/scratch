@@ -92,7 +92,7 @@ const LeftButtons: FunctionComponent<LeftButtonsProps> = ({
 					</Text>
 				)}
 			</TouchableWithoutFeedback>
-			{screenTitle === "Game" && <Icon name="search" size={24} color="#fff" />}
+			{/* {screenTitle === "Game" && <Icon name="search" size={24} color="#fff" />} */}
 		</View>
 
 		<View style={{}}>

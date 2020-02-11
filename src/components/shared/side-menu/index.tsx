@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -11,6 +11,7 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { ListItem } from "react-native-elements";
 import { logout } from "../../../apis/auth";
+import { useAppContext } from "../../../providers/AppProvider";
 
 const blackList = [
 	{
@@ -41,7 +42,7 @@ const blackList = [
 		title: "Notifications",
 		icon: "bell",
 		type: "feather",
-		goTo: "NotificationsScreen",
+		goTo: "Notifications",
 	},
 	{
 		title: "Logout",
@@ -96,7 +97,10 @@ const iconStyles = {
 const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 	const [isMyAccount, handleMyAccounSection] = useState(false);
 	const [helpOpened, handleHelpOpened] = useState(false);
+	const [unreadNotifiction, handleUnreadNotification] = useState(false);
 
+	const { store } = useAppContext();
+	const { data: notifications } = store.notifications;
 	const navigateTo = (screenName) => {
 		if (screenName === "logout") {
 			logout();
@@ -105,6 +109,15 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 		navigation.navigate(screenName);
 	};
 
+	useEffect(() => {
+		console.log("----------checking notifications");
+		for (let index = 0; index < notifications.length; index++) {
+			if (!notifications[index].read) {
+				handleUnreadNotification(true);
+				break;
+			}
+		}
+	}, []);
 	return (
 		<Modal transparent animationType="slide" visible={isOpen}>
 			<View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }}>
@@ -347,6 +360,11 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 										leftIcon={{
 											name: item.icon,
 											type: item.type,
+											color: `${
+												item.title === "Notifications" && unreadNotifiction
+													? "red"
+													: "#BDBDBD"
+											}`,
 										}}
 										titleStyle={{
 											color: "#333333",

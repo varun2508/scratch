@@ -8,4 +8,14 @@
 - Added two new option in setting popUp. User can navigate to FAQs and Terms and conditions screen by pressing new buttons;
 - Added FAQs screen;
 - Added Terms & Privacy screen with two tabs;
-- Added weekly winers screen;
+- Added weekly winers api on server and new screen;
+- Added "My history" screen and created api for it;
+- Cretead general stats api available on ;
+- Create web admin dashboard screen with game history table;
+- Create web screen with list of existing users;
+- Added loader to "Register" button on register screen that stops user from double pressing;
+- Create new game "Candy rush"
+- Create new game "Extra juice"
+- adjusted game header for multiple games;
+- restyled "Play and win" screen;
+- added Notifications screen and api for it. For now the app sends notifications when password resset was requsted and first game was won;

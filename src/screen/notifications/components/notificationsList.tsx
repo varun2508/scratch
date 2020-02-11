@@ -1,12 +1,12 @@
 import React from "react";
-import { Image, StyleSheet, ScrollView } from "react-native";
+import { AsyncStorage, StyleSheet, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import { format } from "date-fns";
 import IconFt from "react-native-vector-icons/Feather";
 import { sc } from "../../../assets/Styles/index";
-interface Props {
-	games: [];
-}
+import { readNotification } from "../../../apis/notifications";
+import { id } from "date-fns/esm/locale";
+
 const styles = StyleSheet.create({
 	whiteRow: {
 		backgroundColor: "#fff",
@@ -20,17 +20,35 @@ const styles = StyleSheet.create({
 		marginBottom: 170,
 	},
 });
-const HistoryList = function(props: Props): React.ReactElement {
+interface Props {
+	notifications: [];
+}
+
+const NotificationsList = function(props: Props): React.ReactElement {
+	const handleRead = async (el) => {
+		const id = await AsyncStorage.getItem("scratchUserId");
+		const result = await readNotification({
+			id: el.id,
+			userId: id,
+			data: {
+				message: el.message,
+				userId: el.userId,
+				read: true,
+				date: el.date,
+			},
+		});
+		console.log("----------result", result);
+	};
 	return (
 		<ScrollView style={styles.container}>
-			{props.games.length === 0 && (
+			{props.notifications.length === 0 && (
 				<NoResultsContainer>
 					<IconFt name={"search"} size={38} color={sc.color.primary}></IconFt>
 					<NoResults>No Results Found</NoResults>
 				</NoResultsContainer>
 			)}
-			{props.games &&
-				props.games.map(
+			{props.notifications[0] &&
+				props.notifications.map(
 					(el, i): React.ReactElement => {
 						return (
 							<WinnerRow
@@ -38,25 +56,19 @@ const HistoryList = function(props: Props): React.ReactElement {
 								style={i % 2 === 0 ? styles.whiteRow : styles.greyRow}
 							>
 								<FirstColumn>
-									<GameName>{el.gameName}</GameName>
 									<WinInfo>
-										<InfoText>{el.win ? "Won" : "Lost"},</InfoText>
-										<Image
-											style={{ marginLeft: 4, marginTop: 4 }}
-											source={require("icons/coin.png")}
-										/>
-										{el.win ? (
-											<WinText>{el.amount}</WinText>
-										) : (
-											<LoseText>-{el.gameCost - el.amount}</LoseText>
-										)}
+										<InfoText>{el.message}</InfoText>
 									</WinInfo>
 								</FirstColumn>
 								<SecondColumn>
+									{!el.read && (
+										<ReadButton onPress={(): Promise => handleRead(el)}>
+											<ReadButtonText>Mark as read</ReadButtonText>
+										</ReadButton>
+									)}
 									<DateLabel>
 										{format(new Date(el.date), "dd MMM yy")}
 									</DateLabel>
-									<DateLabel>{format(new Date(el.date), "HH:mm a")}</DateLabel>
 								</SecondColumn>
 							</WinnerRow>
 						);
@@ -66,7 +78,7 @@ const HistoryList = function(props: Props): React.ReactElement {
 	);
 };
 
-export default HistoryList;
+export default NotificationsList;
 
 const WinnerRow = styled.View`
 	flex-direction: row;
@@ -81,22 +93,12 @@ const WinInfo = styled.View`
 const InfoText = styled.Text`
 	margin-left: 3;
 `;
-const WinText = styled.Text`
-	margin-left: 3;
-	color: green;
-`;
-const LoseText = styled.Text`
-	margin-left: 3;
-	color: red;
-`;
+
 const SecondColumn = styled.View`
 	width: 30%;
+	align-items: center;
 `;
-const GameName = styled.Text`
-	font-weight: bold;
-	font-size: 16px;
-	margin-left: 3;
-`;
+
 const DateLabel = styled.Text`
 	color: #828282;
 	font-size: 16px;
@@ -104,7 +106,6 @@ const DateLabel = styled.Text`
 
 const NoResultsContainer = styled.View`
 	height: 300px;
-	/* border: 1px solid red; */
 	justify-content: center;
 	align-items: center;
 `;
@@ -113,4 +114,21 @@ const NoResults = styled.Text`
 	font-size: 25;
 	color: ${sc.color.primary};
 	margin-top: 15;
+`;
+
+const ReadButton = styled.TouchableOpacity`
+	background-color: #fbdc42;
+	border-radius: 25;
+	width: 100;
+	height: 30;
+	justify-content: center;
+	align-items: center;
+	align-self: flex-start;
+	margin-top: 1;
+`;
+
+const ReadButtonText = styled.Text`
+	color: #333333;
+	font-size: 12;
+	font-weight: bold;
 `;

@@ -92,7 +92,7 @@ export const updatePassword = async (body: object): Promise<void> => {
 			`${ApiUtils.getRootUrl()}/Clients/change-password`,
 			fetchOption
 		);
-		console.log("---------res on resset-", fetchOption);
+
 		await ApiUtils.checkStatus(res, fetchOption);
 		Alert.alert("Password was reset!");
 	} catch (err) {
@@ -141,13 +141,9 @@ export const getCurrentUser = async (): Promise<Response> => {
 		.then((response) => ApiUtils.checkStatus(response, fetchOption))
 		.then(async (response) => {
 			const user = await response.json();
-			// console.log('----------ress on getMyUser', response, 'user', user);
-
 			return user;
 		})
 		.catch(async (err) => {
-			// let parsed = null;
-			// parsed = await err.json();
 			console.log("----------error on getCurrentUser");
 			return new Error(err);
 		});
@@ -188,19 +184,14 @@ export const getUserById = async (userId: string | null): Promise<User> => {
 			Authorization: `${token}`,
 		}),
 	};
-	console.log("-----------------userId-------------------", userId);
 	const URL = `${ApiUtils.getRootUrl()}/Clients/${userId}`;
-	console.log("-----------------URL-------------------", URL);
 
 	return fetch(URL, fetchOption)
 		.then((response) => {
-			console.log("------response before check api----");
 			return ApiUtils.checkStatus(response, fetchOption);
 		})
 		.then(async (response) => {
-			let user = await response.json();
-			console.log("----------ress on getUserById", response, "user", user);
-
+			const user = await response.json();
 			return user;
 		})
 		.catch(async (err) => {

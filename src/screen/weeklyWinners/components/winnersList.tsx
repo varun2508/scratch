@@ -1,7 +1,9 @@
 import React from "react";
 import { View, Image, StyleSheet, ScrollView } from "react-native";
 import styled from "styled-components/native";
-import { compareAsc, format } from "date-fns";
+import { format } from "date-fns";
+import IconFt from "react-native-vector-icons/Feather";
+import { sc } from "../../../assets/Styles/index";
 interface Props {
 	players: [];
 }
@@ -14,10 +16,20 @@ const styles = StyleSheet.create({
 	greyRow: {
 		padding: 5,
 	},
+	container: {
+		marginBottom: 170,
+	},
 });
+
 const WinnersList = function(props: Props): React.ReactElement {
 	return (
-		<ScrollView>
+		<ScrollView style={styles.container}>
+			{props.players.length === 0 && (
+				<NoResultsContainer>
+					<IconFt name={"search"} size={38} color={sc.color.primary}></IconFt>
+					<NoResults>No Results Found</NoResults>
+				</NoResultsContainer>
+			)}
 			{props.players &&
 				props.players.map(
 					(el, i): React.ReactElement => {
@@ -28,7 +40,7 @@ const WinnersList = function(props: Props): React.ReactElement {
 							>
 								<FirstColumn>
 									<PlayerName>
-										{el.firstName} {el.lastName}
+										{el.firstName || "-"} {el.lastName || "-"}
 									</PlayerName>
 									<WinInfo>
 										<InfoText>Win,</InfoText>
@@ -84,4 +96,16 @@ const DateLabel = styled.Text`
 
 const GameName = styled.Text`
 	margin-left: 15;
+`;
+const NoResultsContainer = styled.View`
+	height: 300px;
+	/* border: 1px solid red; */
+	justify-content: center;
+	align-items: center;
+`;
+
+const NoResults = styled.Text`
+	font-size: 25;
+	color: ${sc.color.primary};
+	margin-top: 15;
 `;

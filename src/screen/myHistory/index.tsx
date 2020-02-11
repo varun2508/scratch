@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Dimensions, RefreshControl, AsyncStorage } from "react-native";
 import styled from "styled-components/native";
 import ScreenFooter from "../../components/shared/footer/index";
@@ -8,10 +8,12 @@ import {
 	NavigationScreenProp,
 	NavigationState,
 } from "react-navigation";
-import { getMyHistory } from "../../apis/stats";
+import { getMyHistory, getGeneralStats } from "../../apis/stats";
 import { sc } from "../../assets/Styles";
+import { useAppContext } from "../../providers/AppProvider";
+import { getUserById } from "../../apis/auth";
 import HistoryList from "./components/historyList";
-import Stats from "./components/stats";
+import Stats from "../../components/shared/historyStats/stats";
 interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
@@ -20,25 +22,33 @@ const { height } = Dimensions.get("window");
 const MyHistory = function(props: Props): React.ReactElement {
 	const [gameList, setGameList] = React.useState([]);
 	const [refreshing, setRefreshing] = React.useState(false);
+	const { store, setUser } = useAppContext();
+	const [generalStats, setGeneralStats] = useState([]);
+
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		getStats().then(() => setRefreshing(false));
+	}, [refreshing]);
 
 	async function getStats() {
 		const id = await AsyncStorage.getItem("scratchUserId");
 		const stats = await getMyHistory(id);
+		const general = await getGeneralStats();
+		setGeneralStats(general);
 		setGameList(stats);
-		console.log("----------stats in my history", stats);
 		return stats;
 	}
 
-	const onRefresh = React.useCallback(() => {
-		setRefreshing(true);
-
-		getStats().then(() => setRefreshing(false));
-	}, [refreshing]);
-
+	async function getUser(): Promise<void> {
+		const id = await AsyncStorage.getItem("scratchUserId");
+		const user = await getUserById(id);
+		setUser(user);
+	}
 	useEffect(() => {
-		console.log("--------calling hook--");
+		getUser();
 		getStats();
 	}, []);
+	const { user } = store;
 	return (
 		<View style={{ flex: 1 }}>
 			<Header screenTitle="My play history" navigation={props.navigation} />
@@ -47,7 +57,10 @@ const MyHistory = function(props: Props): React.ReactElement {
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
 			>
-				{/* <Stats avgWinRatio={playersList.avgWinRatio} /> */}
+				<Stats
+					avgWinRatio={generalStats[0] ? generalStats[0].avgWinRatio : 0}
+					userWinRatio={user.winRatio}
+				/>
 				<HistoryList games={gameList} />
 			</ContentContainer>
 			<ScreenFooter navigation={props.navigation} />

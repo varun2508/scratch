@@ -18,13 +18,14 @@ import ScreenFooter from "../../components/shared/footer/index";
 import { Header } from "../../components/shared";
 import { useAppContext } from "../../providers/AppProvider";
 import { getUserById } from "../../apis/auth";
+import { getNotifications } from "../../apis/notifications";
 
 interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 	navigateTo(screenName: string): void;
 }
 const StatusScreen = function(props: Props): React.ReactElement {
-	const { store, setUser } = useAppContext();
+	const { store, setUser, setNotifications } = useAppContext();
 	props.navigateTo = (screenName: string): void => {
 		const { navigation } = props;
 		navigation.navigate(screenName);
@@ -33,7 +34,10 @@ const StatusScreen = function(props: Props): React.ReactElement {
 	async function getUser(): Promise<void> {
 		const id = await AsyncStorage.getItem("scratchUserId");
 		const user = await getUserById(id);
+		const notifications = await getNotifications(id);
 		setUser(user);
+		console.log("----notifications----in status--", notifications);
+		setNotifications(notifications);
 	}
 	useEffect(() => {
 		getUser();

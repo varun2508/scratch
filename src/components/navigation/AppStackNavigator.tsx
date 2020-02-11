@@ -9,6 +9,7 @@ import TermsAndPrivacy from "../../screen/terms&Privacy";
 import FAQs from "../../screen/faq";
 import WeeklyWinners from "../../screen/weeklyWinners";
 import MyHistory from "../../screen/myHistory";
+import Notifications from "../../screen/notifications";
 
 const routeConfig = {
 	StatusScreen: {
@@ -49,6 +50,9 @@ const routeConfig = {
 	},
 	MyHistory: {
 		screen: MyHistory,
+	},
+	Notifications: {
+		screen: Notifications,
 	},
 };
 
