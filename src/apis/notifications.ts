@@ -1,12 +1,12 @@
 import ApiUtils from "./api-utils";
 
-export const getNotifications = async (body: object): Promise<Response> => {
+export const getNotifications = async (id: string): Promise<Response> => {
 	const fetchOption: RequestInit = {
 		method: "POST",
 		headers: new Headers({
 			"Content-Type": "application/json",
 		}),
-		body: { id: "5e40718211418d1e7c536a4d" },
+		body: { id },
 	};
 	console.log("----------gettinhg notificationssssss-------");
 	const URL = `${ApiUtils.getRootUrl()}/Notifications/getNotificationsForUser`;
@@ -39,11 +39,10 @@ export const readNotification = async (body: {
 		.then((response) => ApiUtils.checkStatus(response, fetchOption))
 		.then(async (response) => {
 			const notification = await response.json();
-			console.log("------notification response----", notification);
 			return notification;
 		})
-		.catch(() => {
-			console.log("----------error on read notifications");
-			return new Error("Error onead notifications");
+		.catch((err) => {
+			console.log("----------error on read notifications", err);
+			return new Error("Error on read notifications");
 		});
 };

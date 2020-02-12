@@ -14,8 +14,8 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import LinearGradient from "react-native-linear-gradient";
-import ScreenFooter from "../../components/shared/footer/index";
-import { Header } from "../../components/shared";
+import ScreenFooter from "shared/footer";
+import { Header } from "shared";
 import { useAppContext } from "../../providers/AppProvider";
 import { getUserById } from "../../apis/auth";
 import { getNotifications } from "../../apis/notifications";
@@ -31,16 +31,20 @@ const StatusScreen = function(props: Props): React.ReactElement {
 		navigation.navigate(screenName);
 	};
 
-	async function getUser(): Promise<void> {
+	const getUser = async (): Promise<void> => {
 		const id = await AsyncStorage.getItem("scratchUserId");
 		const user = await getUserById(id);
-		const notifications = await getNotifications(id);
 		setUser(user);
-		console.log("----notifications----in status--", notifications);
+	};
+
+	const checkForNotification = async (): Promise<void> => {
+		const id = await AsyncStorage.getItem("scratchUserId");
+		const notifications = await getNotifications(id);
 		setNotifications(notifications);
-	}
+	};
 	useEffect(() => {
 		getUser();
+		checkForNotification();
 	}, []);
 
 	const { user } = store;

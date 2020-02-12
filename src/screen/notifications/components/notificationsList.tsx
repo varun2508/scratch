@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import IconFt from "react-native-vector-icons/Feather";
 import { sc } from "../../../assets/Styles/index";
 import { readNotification } from "../../../apis/notifications";
-import { id } from "date-fns/esm/locale";
+import { useAppContext } from "../../../providers/AppProvider";
 
 const styles = StyleSheet.create({
 	whiteRow: {
@@ -25,6 +25,8 @@ interface Props {
 }
 
 const NotificationsList = function(props: Props): React.ReactElement {
+	const { setNotifications, store } = useAppContext();
+	const { data: notifications } = store.notifications;
 	const handleRead = async (el) => {
 		const id = await AsyncStorage.getItem("scratchUserId");
 		const result = await readNotification({
@@ -37,18 +39,18 @@ const NotificationsList = function(props: Props): React.ReactElement {
 				date: el.date,
 			},
 		});
-		console.log("----------result", result);
+		setNotifications(result);
 	};
 	return (
 		<ScrollView style={styles.container}>
-			{props.notifications.length === 0 && (
+			{notifications && notifications.length === 0 && (
 				<NoResultsContainer>
 					<IconFt name={"search"} size={38} color={sc.color.primary}></IconFt>
 					<NoResults>No Results Found</NoResults>
 				</NoResultsContainer>
 			)}
-			{props.notifications[0] &&
-				props.notifications.map(
+			{notifications[0] &&
+				notifications.map(
 					(el, i): React.ReactElement => {
 						return (
 							<WinnerRow

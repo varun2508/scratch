@@ -1,14 +1,24 @@
 import React, { useEffect } from "react";
 import { View, ScrollView, AsyncStorage } from "react-native";
-import { Header, Add } from "shared";
-import ScreenFooter from "shared/footer";
 import styled from "styled-components/native";
+import {
+	NavigationParams,
+	NavigationScreenProp,
+	NavigationState,
+} from "react-navigation";
+import ScreenFooter from "shared/footer";
+import { Header, Add } from "shared";
 import { getNotifications } from "../../apis/notifications";
 import { useAppContext } from "../../providers/AppProvider";
 
+interface Props {
+	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
 const PlayScreen = function(props: Props): React.ReactElement {
-	const checkForNotification = async (): void => {
-		const { setNotifications } = useAppContext();
+	const { setNotifications } = useAppContext();
+
+	const checkForNotification = async (): Promise<void> => {
 		const id = await AsyncStorage.getItem("scratchUserId");
 		const notifications = await getNotifications(id);
 		setNotifications(notifications);

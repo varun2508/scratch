@@ -20,7 +20,6 @@ const { height } = Dimensions.get("window");
 const Notifications = function(props: Props): React.ReactElement {
 	const [refreshing, setRefreshing] = React.useState(false);
 	const { store, setNotifications } = useAppContext();
-	const { data: notifications } = store.notifications;
 
 	async function handleGetNotifications() {
 		const id = await AsyncStorage.getItem("scratchUserId");
@@ -49,7 +48,7 @@ const Notifications = function(props: Props): React.ReactElement {
 					avgWinRatio={generalStats[0] ? generalStats[0].avgWinRatio : 0}
 					userWinRatio={user.winRatio}
 				/> */}
-				<NotificationsList notifications={notifications} />
+				<NotificationsList />
 			</ContentContainer>
 			<ScreenFooter navigation={props.navigation} />
 		</View>

@@ -110,7 +110,7 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 	};
 
 	useEffect(() => {
-		console.log("----------checking notifications");
+		console.log("----------checking notifications!!!!!!!!!!!!!!!!!!!!!");
 		for (let index = 0; index < notifications.length; index++) {
 			if (!notifications[index].read) {
 				handleUnreadNotification(true);
