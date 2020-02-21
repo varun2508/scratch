@@ -315,7 +315,11 @@ function GameScreen(props: Props): React.ReactElement {
 
 			{winState === "notTouched" && <ScratchGame />}
 			{winState !== "notTouched" && (
-				<Results navigation={props.navigation} winState={winState} />
+				<Results
+					navigation={props.navigation}
+					winState={winState}
+					amountWon={differenceAmount}
+				/>
 			)}
 			<Instructions winState={winState} />
 			<View>

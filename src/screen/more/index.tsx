@@ -9,6 +9,7 @@ import {
 	View,
 	TouchableWithoutFeedback,
 	Image,
+	ScrollView,
 } from "react-native";
 
 import styled from "styled-components/native";
@@ -69,12 +70,20 @@ const MoreScreen: FunctionComponent = (props) => {
 
 	const renderInputs = (): React.SFC => (
 		<View>
-			<View style={{ marginTop: 16, marginBottom: 16 }}>
+			<View
+				style={{
+					marginTop: 16,
+					marginBottom: 16,
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
 				<TextInput
 					placeholder="Your email address "
 					editable={false}
 					style={{
 						height: 40,
+						width: "70%",
 						borderBottomColor: "gray",
 						borderBottomWidth: 1,
 						textAlign: "center",
@@ -87,6 +96,7 @@ const MoreScreen: FunctionComponent = (props) => {
 					placeholder="First Name"
 					style={{
 						height: 40,
+						width: "70%",
 						borderBottomColor: "gray",
 						borderBottomWidth: 1,
 						textAlign: "center",
@@ -99,6 +109,7 @@ const MoreScreen: FunctionComponent = (props) => {
 					placeholder="Last Name"
 					style={{
 						height: 40,
+						width: "70%",
 						borderBottomColor: "gray",
 						borderBottomWidth: 1,
 						textAlign: "center",
@@ -112,6 +123,7 @@ const MoreScreen: FunctionComponent = (props) => {
 					placeholder="Birth date"
 					style={{
 						height: 40,
+						width: "70%",
 						borderBottomColor: "gray",
 						borderBottomWidth: 1,
 						textAlign: "center",
@@ -273,9 +285,10 @@ const MoreScreen: FunctionComponent = (props) => {
 	);
 };
 
-const Container = styled.View`
+const Container = styled.ScrollView`
 	flex: 1;
 	padding: 16px;
+	margin-bottom: 50px;
 `;
 
 const SubText = styled.Text`

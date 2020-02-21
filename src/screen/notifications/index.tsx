@@ -23,7 +23,8 @@ const Notifications = function(props: Props): React.ReactElement {
 
 	async function handleGetNotifications() {
 		const id = await AsyncStorage.getItem("scratchUserId");
-		const notifStore = await getNotifications(id);
+		console.log("----------id", id);
+		const notifStore = await getNotifications({ id });
 		setNotifications(notifStore);
 		return notifStore;
 	}

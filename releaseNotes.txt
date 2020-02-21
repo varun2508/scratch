@@ -10,12 +10,16 @@
 - Added Terms & Privacy screen with two tabs;
 - Added weekly winers api on server and new screen;
 - Added "My history" screen and created api for it;
-- Cretead general stats api available on ;
-- Create web admin dashboard screen with game history table;
-- Create web screen with list of existing users;
+- Cretead general stats api available on https://scratchandwin.herokuapp.com/;
+- Create web admin dashboard screen with game history table https://scratchandwin.herokuapp.com/;
+- Create "Accounts" web screen with list of existing users https://scratchandwin.herokuapp.com/table.html;
+- Created statiscs api for each user;
+- Created general api for general statistics;
 - Added loader to "Register" button on register screen that stops user from double pressing;
-- Create new game "Candy rush"
-- Create new game "Extra juice"
+- Create new game "Candy Battle";
+- Create new game "Extra juice";
+- displayed on results game "amount won";
 - adjusted game header for multiple games;
 - restyled "Play and win" screen;
 - added Notifications screen and api for it. For now the app sends notifications when password resset was requsted and first game was won;
+- added scroll on "My profile" screen;

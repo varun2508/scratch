@@ -20,7 +20,9 @@ const PlayScreen = function(props: Props): React.ReactElement {
 
 	const checkForNotification = async (): Promise<void> => {
 		const id = await AsyncStorage.getItem("scratchUserId");
-		const notifications = await getNotifications(id);
+		console.log("----------id", id);
+
+		const notifications = await getNotifications({id});
 		setNotifications(notifications);
 	};
 

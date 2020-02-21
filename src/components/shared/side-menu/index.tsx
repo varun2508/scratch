@@ -14,12 +14,12 @@ import { logout } from "../../../apis/auth";
 import { useAppContext } from "../../../providers/AppProvider";
 
 const blackList = [
-	{
-		title: "My referals",
-		icon: "git-pull-request",
-		type: "feather",
-		goTo: "MyReferalsScreen",
-	},
+	// {
+	// 	title: "My referals",
+	// 	icon: "git-pull-request",
+	// 	type: "feather",
+	// 	goTo: "MyReferalsScreen",
+	// },
 	{
 		title: "My play history",
 		icon: "history",
@@ -100,7 +100,7 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 	const [unreadNotifiction, handleUnreadNotification] = useState(false);
 
 	const { store } = useAppContext();
-	const { data: notifications } = store.notifications;
+	const { unread } = store.notifications;
 	const navigateTo = (screenName) => {
 		if (screenName === "logout") {
 			logout();
@@ -109,15 +109,6 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 		navigation.navigate(screenName);
 	};
 
-	useEffect(() => {
-		console.log("----------checking notifications!!!!!!!!!!!!!!!!!!!!!");
-		for (let index = 0; index < notifications.length; index++) {
-			if (!notifications[index].read) {
-				handleUnreadNotification(true);
-				break;
-			}
-		}
-	}, []);
 	return (
 		<Modal transparent animationType="slide" visible={isOpen}>
 			<View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }}>
@@ -197,7 +188,7 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 						</View>
 					</View>
 					<ScrollView>
-						<TouchableWithoutFeedback
+						{/* <TouchableWithoutFeedback
 							onPress={(): void => handleMyAccounSection(!isMyAccount)}
 						>
 							<ListItem
@@ -218,9 +209,9 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 									lineHeight: 16,
 								}}
 							/>
-						</TouchableWithoutFeedback>
+						</TouchableWithoutFeedback> */}
 
-						<View
+						{/* <View
 							style={{
 								borderBottomWidth: 1,
 								borderBottomColor: "#C6C6C9",
@@ -255,7 +246,7 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 										}}
 									/>
 								))}
-						</View>
+						</View> */}
 
 						{blackList.map((item, i) => {
 							if (item.title === "Help") {
@@ -361,7 +352,7 @@ const SideMenu = ({ navigation, isOpen, handleModalState }) => {
 											name: item.icon,
 											type: item.type,
 											color: `${
-												item.title === "Notifications" && unreadNotifiction
+												item.title === "Notifications" && unread > 0
 													? "red"
 													: "#BDBDBD"
 											}`,

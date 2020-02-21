@@ -28,7 +28,7 @@ const initialState: State = {
 		plan: "",
 		id: "",
 	},
-	notifications: { data: [] },
+	notifications: { data: [], unread: 0 },
 };
 
 interface Action {
@@ -52,7 +52,16 @@ const getMe = (dispatch: React.Dispatch<Action>) => (user: User): void => {
 const setNotifications = (dispatch: React.Dispatch<Action>) => (
 	notifications: Notifications
 ): void => {
-	console.log("----------provider--seting notifications");
+	let unread = 0;
+	const arr = notifications.data;
+
+	arr.map((notification) => {
+		if (!notification.read) {
+			unread++;
+		}
+	});
+	notifications.unread = unread;
+	console.log("------notifications in provider----", notifications);
 	dispatch({
 		type: "set-notifications",
 		payload: { notifications },

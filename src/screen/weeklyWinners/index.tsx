@@ -28,8 +28,12 @@ const WeeklyWinners = function(props: Props): React.ReactElement {
 	const { store, setUser } = useAppContext();
 
 	async function getStats() {
+		setRefreshing(true);
+
 		const stats = await getWeelyTop();
 		setPlayersList(stats[0]);
+		setRefreshing(false);
+
 		return stats;
 	}
 

@@ -63,14 +63,14 @@ const NotificationsList = function(props: Props): React.ReactElement {
 									</WinInfo>
 								</FirstColumn>
 								<SecondColumn>
+									<DateLabel>
+										{format(new Date(el.date), "dd MMM yy")}
+									</DateLabel>
 									{!el.read && (
 										<ReadButton onPress={(): Promise => handleRead(el)}>
 											<ReadButtonText>Mark as read</ReadButtonText>
 										</ReadButton>
 									)}
-									<DateLabel>
-										{format(new Date(el.date), "dd MMM yy")}
-									</DateLabel>
 								</SecondColumn>
 							</WinnerRow>
 						);
@@ -87,23 +87,26 @@ const WinnerRow = styled.View`
 	justify-content: space-between;
 `;
 
-const FirstColumn = styled.View``;
 const WinInfo = styled.View`
 	flex-direction: row;
-	justify-content: space-between;
+	width: 100%;
+`;
+const FirstColumn = styled.View`
+	width: 65%;
+`;
+const SecondColumn = styled.View`
+	align-items: center;
+	justify-content: flex-start;
+	width: 30%;
 `;
 const InfoText = styled.Text`
 	margin-left: 3;
 `;
 
-const SecondColumn = styled.View`
-	width: 30%;
-	align-items: center;
-`;
-
 const DateLabel = styled.Text`
 	color: #828282;
 	font-size: 16px;
+	margin-top: -2px;
 `;
 
 const NoResultsContainer = styled.View`
@@ -125,7 +128,7 @@ const ReadButton = styled.TouchableOpacity`
 	height: 30;
 	justify-content: center;
 	align-items: center;
-	align-self: flex-start;
+	align-self: center;
 	margin-top: 1;
 `;
 

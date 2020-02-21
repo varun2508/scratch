@@ -1,14 +1,14 @@
 import ApiUtils from "./api-utils";
 
-export const getNotifications = async (id: string): Promise<Response> => {
+export const getNotifications = async (body: object): Promise<Response> => {
 	const fetchOption: RequestInit = {
 		method: "POST",
 		headers: new Headers({
 			"Content-Type": "application/json",
 		}),
-		body: { id },
+		body: JSON.stringify(body),
 	};
-	console.log("----------gettinhg notificationssssss-------");
+	console.log("----------gettinhg notificationssssss-------", fetchOption.body);
 	const URL = `${ApiUtils.getRootUrl()}/Notifications/getNotificationsForUser`;
 	return fetch(URL, fetchOption)
 		.then((response) => ApiUtils.checkStatus(response, fetchOption))

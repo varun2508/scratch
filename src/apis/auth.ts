@@ -149,7 +149,9 @@ export const getCurrentUser = async (): Promise<Response> => {
 		});
 };
 
-export const updateUser = async (body: object): Promise<Response> => {
+export const updateUser = async (body: {
+	userId: string;
+}): Promise<Response> => {
 	const token = await AsyncStorage.getItem("scratchToken");
 
 	const fetchOption: RequestInit = {

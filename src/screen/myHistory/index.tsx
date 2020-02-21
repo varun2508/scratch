@@ -31,11 +31,13 @@ const MyHistory = function(props: Props): React.ReactElement {
 	}, [refreshing]);
 
 	async function getStats() {
+		setRefreshing(true);
 		const id = await AsyncStorage.getItem("scratchUserId");
 		const stats = await getMyHistory(id);
 		const general = await getGeneralStats();
 		setGeneralStats(general);
 		setGameList(stats);
+		setRefreshing(false);
 		return stats;
 	}
 
