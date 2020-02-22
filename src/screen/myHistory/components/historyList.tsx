@@ -4,6 +4,11 @@ import styled from "styled-components/native";
 import { format } from "date-fns";
 import IconFt from "react-native-vector-icons/Feather";
 import { sc } from "../../../assets/Styles/index";
+import {
+	NoResultsContainer,
+	NoResults,
+} from "../../../components/ui/viewComponents";
+
 interface Props {
 	games: [];
 }
@@ -100,17 +105,4 @@ const GameName = styled.Text`
 const DateLabel = styled.Text`
 	color: #828282;
 	font-size: 16px;
-`;
-
-const NoResultsContainer = styled.View`
-	height: 300px;
-	/* border: 1px solid red; */
-	justify-content: center;
-	align-items: center;
-`;
-
-const NoResults = styled.Text`
-	font-size: 25;
-	color: ${sc.color.primary};
-	margin-top: 15;
 `;

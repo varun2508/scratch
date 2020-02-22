@@ -84,6 +84,15 @@ class RegistrationScreen extends React.Component {
 				isActive: true,
 				userType: "client",
 				tockens: 200,
+				winRatio: 0,
+				win: 0,
+				losses: 0,
+				totalUserGamesNumber: 0,
+				amountLoosed: 0,
+				amountWon: 0,
+				referralCode:
+					(+new Date()).toString(36).slice(-5) + Math.floor(Math.random() * 62),
+				referrals: [],
 			});
 			this.setState({ loading: false });
 		} else {

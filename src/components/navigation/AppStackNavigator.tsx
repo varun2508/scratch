@@ -10,6 +10,7 @@ import FAQs from "../../screen/faq";
 import WeeklyWinners from "../../screen/weeklyWinners";
 import MyHistory from "../../screen/myHistory";
 import Notifications from "../../screen/notifications";
+import Referrals from "../../screen/referrals";
 
 const routeConfig = {
 	StatusScreen: {
@@ -53,6 +54,9 @@ const routeConfig = {
 	},
 	Notifications: {
 		screen: Notifications,
+	},
+	Referrals: {
+		screen: Referrals,
 	},
 };
 

@@ -14,12 +14,12 @@ import { logout } from "../../../apis/auth";
 import { useAppContext } from "../../../providers/AppProvider";
 
 const blackList = [
-	// {
-	// 	title: "My referals",
-	// 	icon: "git-pull-request",
-	// 	type: "feather",
-	// 	goTo: "MyReferalsScreen",
-	// },
+	{
+		title: "My referrals",
+		icon: "git-pull-request",
+		type: "feather",
+		goTo: "Referrals",
+	},
 	{
 		title: "My play history",
 		icon: "history",

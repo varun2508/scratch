@@ -23,3 +23,6 @@
 - restyled "Play and win" screen;
 - added Notifications screen and api for it. For now the app sends notifications when password resset was requsted and first game was won;
 - added scroll on "My profile" screen;
+
+Release Notes: 22.02.20
+- added "Referrals screen" and set navigation to it. Can be accesed from setting menu by pressing "My referrals".

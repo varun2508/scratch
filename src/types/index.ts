@@ -10,6 +10,8 @@ export interface User {
 	tockens: number;
 	plan: string;
 	id: string;
+	referrals: Array<object>;
+	referralCode: string;
 }
 
 export interface Notifications {
