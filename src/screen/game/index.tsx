@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { Image, View, ActivityIndicator, Alert } from "react-native";
+import {
+	Image,
+	View,
+	ActivityIndicator,
+	Alert,
+	Dimensions,
+	ScrollView,
+} from "react-native";
 import {
 	NavigationParams,
 	NavigationScreenProp,
@@ -9,6 +16,7 @@ import Add from "../../components/shared/add";
 import GameHeader from "./GameHeader";
 // import { getString } from '../../../STRINGS';
 import { Header } from "../../components/shared";
+import ScreenFooter from "../../components/shared/footer/index";
 import Instructions from "./Instructions";
 import Results from "./Results";
 import ScratchView from "react-native-scratch";
@@ -16,6 +24,7 @@ import styled from "styled-components/native";
 import { useAppContext } from "../../providers/AppProvider";
 import { postGameResults, updateTockens } from "../../apis/user";
 // import { getUserById } from '../../../apis/auth';
+const { height } = Dimensions.get("window");
 import * as Animatable from "react-native-animatable";
 const Loader = styled.View`
 	position: absolute;
@@ -67,11 +76,11 @@ function GameScreen(props: Props): React.ReactElement {
 	const [winState, setWinState] = React.useState<string>("notTouched");
 	const imageUrl = `https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/${gameName}/`;
 	const imageOrder = [];
-	const results = [[], [], [], [], [], []];
+	let results = [[], [], [], [], [], []];
 	let winCategory;
 	const { user } = store;
 	const handleViewRef = (ref) => (view = ref);
-
+	const userWinProbability = 1;
 	const bounce = () =>
 		view
 			.animate({
@@ -103,24 +112,84 @@ function GameScreen(props: Props): React.ReactElement {
 			.then((endState) =>
 				console.log(endState.finished ? "bounce finished" : "bounce cancelled")
 			);
+
 	const setCategory = () => {
-		for (let index = 0; index < 6; index++) {
-			const category = Math.floor(Math.random() * 6 + 1);
-			results[category - 1].push(category);
-			imageOrder.push(category);
+		const userWinThreshhold = 1.5;
+		console.log("----------setting category");
+		let resultShouldBe = "lose";
+		const win = () => {
+			console.log("win");
+			resultShouldBe = "win";
+		};
+
+		const lose = () => {
+			resultShouldBe = "lose";
+		};
+
+		const randomNumber = Math.random() * 100;
+		if (randomNumber > userWinThreshhold) {
+			win();
+		} else {
+			lose();
 		}
-		results.forEach((elem, i) => {
-			if (elem.length > 2) {
-				winCategory = i + 1;
+
+		if (resultShouldBe === "win") {
+			let forShouldStop = false;
+			console.log("-----resultShouldBe in if one time-----", resultShouldBe);
+
+			// in case of win
+			while (forShouldStop === false) {
+				results = [[], [], [], [], [], []];
+				for (let index = 0; index < 6; index++) {
+					const category = Math.floor(Math.random() * 6 + 1);
+					results[category - 1].push(category);
+					imageOrder.push(category);
+					console.log("-----category-----", category);
+				}
+				console.log("-----results-----", results);
+				console.log("-----resultShouldBe-----", resultShouldBe);
+				results.forEach((elem, i) => {
+					if (elem.length > 2) {
+						forShouldStop = true;
+						winCategory = i + 1;
+					}
+				});
 			}
-		});
+		} else {
+			console.log("-----resultShouldBe in if one time-----", resultShouldBe);
+
+			// in case of lose
+			let itIsAWiningFor: boolean | string = "firsTime";
+			do {
+				results = [[], [], [], [], [], []];
+
+				itIsAWiningFor = "lose";
+				for (let index = 0; index < 6; index++) {
+					const category = Math.floor(Math.random() * 6 + 1);
+					results[category - 1].push(category);
+					imageOrder.push(category);
+					console.log("-----category-----", category);
+				}
+
+				console.log("-----results-----", results);
+				results.forEach((elem, i) => {
+					if (elem.length > 2) {
+						itIsAWiningFor = "win";
+						winCategory = i + 1;
+					}
+				});
+				console.log("-----resultShouldBe-----", resultShouldBe);
+				console.log("-----itIsAWiningFor-----", itIsAWiningFor);
+			} while (itIsAWiningFor === "firsTime" || itIsAWiningFor === "win");
+		}
 	};
+
 	const takeGameCost = async () => {
 		setDifferenceAmount(`-${gameCost}`);
 
 		setIsLoading(true);
 		if (user.tockens < gameCost) {
-			Alert.alert("You don`t have enough tockens!");
+			Alert.alert("You don`t have enough tokens!");
 			return props.navigation.navigate("StatusScreen", {});
 		}
 		const updatedUser = await updateTockens({
@@ -134,6 +203,9 @@ function GameScreen(props: Props): React.ReactElement {
 	};
 
 	useEffect(() => {
+		console.log("---------useeffect-");
+		setCategory();
+
 		takeGameCost();
 	}, []);
 
@@ -205,91 +277,96 @@ function GameScreen(props: Props): React.ReactElement {
 		console.log("------onScratchTouchStateChanged----", touchState, id);
 	};
 
-	const GameElement = ({ order }): React.ReactElement => {
-		if (order === 1) {
-			setCategory();
+	const GameElement = React.memo(
+		({ order }): React.ReactElement => {
+			// if (order === 1) {
+			// 	setCategory();
+			// }
+			console.log("----------results!!!!!!!!!", results);
+			return (
+				<Image
+					style={{
+						marginRight: 5,
+						marginBottom: 5,
+						borderRadius: 5,
+						height: "70%",
+						width: "70%",
+						resizeMode: "stretch",
+					}}
+					source={{
+						uri: `${imageUrl}${imageOrder[order - 1]}${
+							winCategory === imageOrder[order - 1] ? "" : "-grey"
+						}.png`,
+					}}
+				/>
+			);
 		}
-		return (
-			<Image
-				style={{
-					marginRight: 5,
-					marginBottom: 5,
-					borderRadius: 5,
-					height: "70%",
-					width: "70%",
-					resizeMode: "stretch",
-				}}
-				source={{
-					uri: `${imageUrl}${imageOrder[order - 1]}${
-						winCategory === imageOrder[order - 1] ? "" : "-grey"
-					}.png`,
-				}}
-			/>
-		);
-	};
-
-	const ScratchGame = (): React.ReactElement => (
-		<View style={{ margin: 10 }}>
-			<GameContainer>
-				<View
-					style={{
-						width: "100%",
-						height: 120,
-						flexDirection: "row",
-						justifyContent: "space-between",
-					}}
-				>
-					<GameElementContainer>
-						<GameElement order={1} />
-					</GameElementContainer>
-					<GameElementContainer>
-						<GameElement order={2} />
-					</GameElementContainer>
-					<GameElementContainer>
-						<GameElement order={3} />
-					</GameElementContainer>
-				</View>
-
-				<View
-					style={{
-						width: "100%",
-						height: 120,
-						flexDirection: "row",
-						justifyContent: "space-between",
-						marginTop: 5,
-					}}
-				>
-					<GameElementContainer>
-						<GameElement order={4} />
-					</GameElementContainer>
-					<GameElementContainer>
-						<GameElement order={5} />
-					</GameElementContainer>
-					<GameElementContainer>
-						<GameElement order={6} />
-					</GameElementContainer>
-				</View>
-			</GameContainer>
-
-			<ScratchView
-				id={1} // ScratchView id (Optional)
-				brushSize={50} // Default is 10% of the smallest dimension (width/height)
-				threshold={50} // Report full scratch after 70 percentage, change as you see fit. Default is 50
-				fadeOut={true} // Disable the fade out animation when scratch is done. Default is true
-				placeholderColor="#AAAAAA" // Scratch color while image is loading (or while image not present)
-				// imageUrl={{ uri: 'scratch' }} // A url to your image (Optional)
-				resourceName={"scratch"} // An image resource name (without the extension like '.png/jpg etc') in the native bundle of the app (drawble for Android, Images.xcassets in iOS) (Optional)
-				resizeMode="cover|contain|stretch" // Resize the image to fit or fill the scratch view. Default is stretch
-				onImageLoadFinished={onImageLoadFinished} // Event to indicate that the image has done loading
-				onTouchStateChanged={onScratchTouchStateChanged} // Touch event (to stop a containing FlatList for example)
-				onScratchProgressChanged={onScratchProgressChanged} // Scratch progress event while scratching
-				onScratchDone={onScratchDone} // Scratch is done event
-			/>
-		</View>
 	);
 
+	const ScratchGame = React.memo(
+		(): React.ReactElement => (
+			<View style={{ margin: 10 }}>
+				<GameContainer>
+					<View
+						style={{
+							width: "100%",
+							height: 100,
+							flexDirection: "row",
+							justifyContent: "space-between",
+						}}
+					>
+						<GameElementContainer>
+							<GameElement order={1} />
+						</GameElementContainer>
+						<GameElementContainer>
+							<GameElement order={2} />
+						</GameElementContainer>
+						<GameElementContainer>
+							<GameElement order={3} />
+						</GameElementContainer>
+					</View>
+
+					<View
+						style={{
+							width: "100%",
+							height: 100,
+							flexDirection: "row",
+							justifyContent: "space-between",
+							marginTop: 5,
+						}}
+					>
+						<GameElementContainer>
+							<GameElement order={4} />
+						</GameElementContainer>
+						<GameElementContainer>
+							<GameElement order={5} />
+						</GameElementContainer>
+						<GameElementContainer>
+							<GameElement order={6} />
+						</GameElementContainer>
+					</View>
+				</GameContainer>
+
+				<ScratchView
+					id={1} // ScratchView id (Optional)
+					brushSize={50} // Default is 10% of the smallest dimension (width/height)
+					threshold={50} // Report full scratch after 70 percentage, change as you see fit. Default is 50
+					fadeOut={true} // Disable the fade out animation when scratch is done. Default is true
+					placeholderColor="#AAAAAA" // Scratch color while image is loading (or while image not present)
+					// imageUrl={{ uri: 'scratch' }} // A url to your image (Optional)
+					resourceName={"scratch"} // An image resource name (without the extension like '.png/jpg etc') in the native bundle of the app (drawble for Android, Images.xcassets in iOS) (Optional)
+					resizeMode="cover|contain|stretch" // Resize the image to fit or fill the scratch view. Default is stretch
+					onImageLoadFinished={onImageLoadFinished} // Event to indicate that the image has done loading
+					onTouchStateChanged={onScratchTouchStateChanged} // Touch event (to stop a containing FlatList for example)
+					onScratchProgressChanged={onScratchProgressChanged} // Scratch progress event while scratching
+					onScratchDone={onScratchDone} // Scratch is done event
+				/>
+			</View>
+		)
+	);
+	console.log("----------render");
 	return (
-		<View>
+		<View style={{ flex: 1 }}>
 			<Header screenTitle="Play & Win!" navigation={props.navigation} />
 			<AnimationContainer>
 				<Animatable.Text
@@ -300,32 +377,35 @@ function GameScreen(props: Props): React.ReactElement {
 					{differenceAmount}
 				</Animatable.Text>
 			</AnimationContainer>
-			<GameHeader imgSource={gameImage} title={gameLabel} />
-			{isLoading && (
-				<Loader>
-					<ActivityIndicator
-						style={{
-							marginTop: "80%",
-						}}
-						size="large"
-						color="#fe5b3b"
-					/>
-				</Loader>
-			)}
+			<View style={{ marginBottom: 0 }}>
+				<GameHeader imgSource={gameImage} title={gameLabel} />
+				{isLoading && (
+					<Loader>
+						<ActivityIndicator
+							style={{
+								marginTop: "80%",
+							}}
+							size="large"
+							color="#fe5b3b"
+						/>
+					</Loader>
+				)}
 
-			{winState === "notTouched" && <ScratchGame />}
-			{winState !== "notTouched" && (
-				<Results
-					navigation={props.navigation}
-					winState={winState}
-					amountWon={differenceAmount}
-				/>
-			)}
-			<Instructions winState={winState} />
-			<View>
-				<Add style={{ borderWidth: 2, borderColor: "red" }} />
-				{/* <ScreenFooter navigation={props.navigation} /> */}
+				{winState === "notTouched" && <ScratchGame />}
+				{winState !== "notTouched" && (
+					<Results
+						navigation={props.navigation}
+						winState={winState}
+						amountWon={differenceAmount}
+					/>
+				)}
+				<Instructions winState={winState} />
+				<Add />
 			</View>
+			<ScreenFooter
+				navigation={props.navigation}
+				// styles={{ marginBottom: 110 }}
+			/>
 		</View>
 	);
 }

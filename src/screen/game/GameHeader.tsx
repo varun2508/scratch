@@ -10,8 +10,8 @@ const HeaderContainer = styled.View`
 `;
 
 const StyledImage = styled.Image`
-	width: 54;
-	height: 54;
+	width: 30;
+	height: 30;
 `;
 
 const StyledTitle = styled.Text`

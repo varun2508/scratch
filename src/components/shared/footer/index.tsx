@@ -1,29 +1,29 @@
-import React from 'react';
-import { View, Button, TouchableOpacity, Text } from 'react-native';
+import React from "react";
+import { View, Button, TouchableOpacity, Text } from "react-native";
 
 // import { StackActions, NavigationActions } from 'react-navigation';
-import NavButton from './navButton';
-import { Footer, FooterTab } from './styles';
+import NavButton from "./navButton";
+import { Footer, FooterTab } from "./styles";
 
-const ScreenFooter = ({ navigation }) => (
-	<Footer>
+const ScreenFooter = ({ navigation, styles }) => (
+	<Footer style={{ ...styles }}>
 		<FooterTab>
 			<NavButton
-				onClick={() => navigation.navigate('StatusScreen')}
+				onClick={() => navigation.navigate("StatusScreen")}
 				imgStyle={{ width: 28, height: 32 }}
-				text={'Status & Balance'}
-				imgSrc={require('icons/Status.png')}
+				text={"Status & Balance"}
+				imgSrc={require("icons/Status.png")}
 			></NavButton>
 			<NavButton
-				onClick={() => navigation.navigate('PlayScreen')}
-				text={'Play & Win'}
-				imgSrc={require('icons/Play.png')}
+				onClick={() => navigation.navigate("PlayScreen")}
+				text={"Play & Win"}
+				imgSrc={require("icons/Play.png")}
 			></NavButton>
 			<NavButton
-				onClick={() => navigation.navigate('MoreScreen')}
+				onClick={() => navigation.navigate("MoreScreen")}
 				imgStyle={{ width: 45, height: 10 }}
-				text={'More'}
-				imgSrc={require('icons/More.png')}
+				text={"More"}
+				imgSrc={require("icons/More.png")}
 			></NavButton>
 		</FooterTab>
 	</Footer>

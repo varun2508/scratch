@@ -112,6 +112,7 @@ function LoginScreen({ navigation }: Props): React.ReactElement {
 							style={styles.input}
 							onChangeText={(email: string): void => setEmail(email)}
 							value={email}
+							keyboardType={"email-address"}
 							placeholder="Your email"
 							placeholderTextColor="#828282"
 							autoCapitalize="none"

@@ -15,6 +15,12 @@ import { useAppContext } from "../../../providers/AppProvider";
 
 const blackList = [
 	{
+		title: "Account details",
+		icon: "user",
+		type: "feather",
+		goTo: "MoreScreen",
+	},
+	{
 		title: "My referrals",
 		icon: "git-pull-request",
 		type: "feather",

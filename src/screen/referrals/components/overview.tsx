@@ -4,18 +4,88 @@ import {
 	TouchableWithoutFeedback,
 	Image,
 	TextInput,
+	Alert,
+	ActivityIndicator,
+	Clipboard,
+	Share,
+	Modal,
+	View,
+	Text,
 } from "react-native";
 import styled from "styled-components/native";
 import { Devider } from "../../../components/ui/Deviders";
 import { AppButton, Add } from "../../../components/shared";
-import { postReferralCode } from "../../../apis/referrals";
+import { postReferralCode, addEarningToBalance } from "../../../apis/referrals";
 import { useAppContext } from "../../../providers/AppProvider";
 
+const HowItWorksModal = ({ modalVisible, setModalVisible }) => {
+	return (
+		<Modal animationType="slide" transparent visible={modalVisible}>
+			<View
+				style={{
+					justifyContent: "flex-end",
+					paddingTop: 20,
+					height: "100%",
+					flexDirection: "column",
+					backgroundColor: "rgba(0, 0, 0, 0.3)",
+				}}
+			>
+				<View
+					style={{
+						height: "85%",
+						backgroundColor: "#fff",
+						alignItems: "center",
+					}}
+				>
+					<View
+						style={{
+							width: "100%",
+							alignItems: "flex-end",
+							// height: aut,
+							marginTop: 20,
+							// position: "absolute",
+							// bottom: 40,
+						}}
+					>
+						<TouchableWithoutFeedback
+							onPress={(): void => setModalVisible(false)}
+						>
+							<Image
+								style={{ marginRight: 36 }}
+								source={require("icons/close.png")}
+							/>
+						</TouchableWithoutFeedback>
+					</View>
+
+					<Text
+						style={{
+							marginTop: 20,
+							padding: 20,
+							fontSize: 15,
+							lineHeight: 20,
+						}}
+					>
+						Referring is a fancy term for inviting a person to download the app
+						and to earn rewards. When a friend signs up and apply a code that
+						you provided to him, you both can get bonuses! Players that use your
+						code will receive 50 tokens, as you also. He will appear in your
+						"referrals list". Be sure to encourage your friend/new player to
+						explore "Scratch and Win" as much as they can, and teach them about
+						how the app works!
+					</Text>
+				</View>
+			</View>
+		</Modal>
+	);
+};
+
 const Overview = function(props: Props): React.ReactElement {
-	const { store } = useAppContext();
+	const { store, setUser } = useAppContext();
 	const [friendReferralCode, setFriendReferralCode] = useState("");
 	const [disableSubmitButton, setDisableSubmitButton] = useState(true);
 	const [requestResult, setRequestResult] = useState({});
+	const [refreshing, setRefreshing] = React.useState(false);
+	const [modalVisible, setModalVisible] = React.useState(false);
 
 	const { user } = store;
 	const handleFriendReferralCode = (code) => {
@@ -30,7 +100,7 @@ const Overview = function(props: Props): React.ReactElement {
 
 	const handleSubmitReferral = async (): Promise => {
 		console.log("----callhandleSubmitReferral------");
-
+		setRefreshing(true);
 		const result = await postReferralCode({
 			referralCode: friendReferralCode,
 			firstName: user.firstName,
@@ -40,12 +110,70 @@ const Overview = function(props: Props): React.ReactElement {
 			amount: 50,
 		});
 		setRequestResult(result);
-
+		setRefreshing(false);
 		console.log("----result in handleSubmitReferral------", result);
 	};
+
+	const handleAddEarningToBalance = async (): Promise => {
+		setRefreshing(true);
+
+		if (user.referralEarnings > 0) {
+			const result = await addEarningToBalance({
+				userId: user.id,
+			});
+
+			setUser(result);
+			setRefreshing(false);
+		} else {
+			Alert.alert("You do not have earnings!!!");
+		}
+	};
+
+	const writeToClipboard = async (): void => {
+		await Clipboard.setString(user.referralCode);
+		Alert.alert("Copied to clipboard!");
+	};
+
+	const onShare = async () => {
+		try {
+			const result = await Share.share({
+				message: `Referral code: ${user.referralCode}`,
+			});
+
+			if (result.action === Share.sharedAction) {
+				if (result.activityType) {
+					console.log("------result.activityType----", result.activityType);
+					// shared with activity type of result.activityType
+				} else {
+					// shared
+					console.log("------shared----");
+				}
+			} else if (result.action === Share.dismissedAction) {
+				// dismissed
+			}
+		} catch (error) {
+			alert(error.message);
+		}
+	};
+
+	if (refreshing) {
+		return (
+			<ActivityIndicator
+				style={{
+					marginTop: "48%",
+				}}
+				size="large"
+				color="#fe5b3b"
+			/>
+		);
+	}
 	return (
 		<ScrollView style={{ marginBottom: 60 }}>
 			<Wrapper>
+				<HowItWorksModal
+					modalVisible={modalVisible}
+					setModalVisible={setModalVisible}
+				/>
 				<TextContainer>
 					<Title>My referral earnings</Title>
 				</TextContainer>
@@ -56,15 +184,13 @@ const Overview = function(props: Props): React.ReactElement {
 								style={{ marginRight: 4 }}
 								source={require("icons/coin.png")}
 							/>
-							<Points>{150}</Points>
-							<PointsText>tockens</PointsText>
+							<Points>{user.referralEarnings || 0}</Points>
+							<PointsText>tokens</PointsText>
 						</PointContainer>
 					</Card>
-					<ButtonContainer>
+					<ButtonContainer style={{ maxWidth: "30%" }}>
 						<TouchableWithoutFeedback
-							onPress={(): void =>
-								console.log("----------transfer to my funds")
-							}
+							onPress={(): void => handleAddEarningToBalance()}
 						>
 							<Button>Add to my balance</Button>
 						</TouchableWithoutFeedback>
@@ -78,9 +204,7 @@ const Overview = function(props: Props): React.ReactElement {
 					<ReferralCodeText>{user.referralCode}</ReferralCodeText>
 				</ReferralCodeContainer>
 				<ButtonContainer>
-					<TouchableWithoutFeedback
-						onPress={(): void => console.log("----------transfer to my funds")}
-					>
+					<TouchableWithoutFeedback onPress={(): void => writeToClipboard()}>
 						<Button>Copy to clipboard</Button>
 					</TouchableWithoutFeedback>
 				</ButtonContainer>
@@ -88,7 +212,7 @@ const Overview = function(props: Props): React.ReactElement {
 					<TouchableWithoutFeedback
 						onPress={(): void => console.log("----------transfer to my funds")}
 					>
-						<Button>Share code</Button>
+						<Button onPress={onShare}>Share code</Button>
 					</TouchableWithoutFeedback>
 				</ButtonContainer>
 
@@ -126,9 +250,7 @@ const Overview = function(props: Props): React.ReactElement {
 						<FailText>{requestResult.message}</FailText>
 					)}
 				</ResultContainer>
-				<HowItWorksContainer
-					onPress={(): void => console.log("----------how it works pressed")}
-				>
+				<HowItWorksContainer onPress={(): void => setModalVisible(true)}>
 					<HowItWorksText>How it works?</HowItWorksText>
 				</HowItWorksContainer>
 				<Add></Add>
@@ -160,7 +282,7 @@ const Points = styled.Text`
 	font-size: 28px;
 	line-height: 36px;
 	color: #fe5b3b;
-	margin-right: 16px;
+	margin-right: 5px;
 `;
 const CardContaienr = styled.View`
 	flex-direction: row;
@@ -232,7 +354,7 @@ const HowItWorksContainer = styled.TouchableOpacity`
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	margin-top: 70px;
+	margin-top: 10px;
 `;
 const HowItWorksText = styled.Text`
 	font-size: 18px;

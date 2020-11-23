@@ -4,7 +4,7 @@ import NavigationService from "../components/navigation/NavigationService";
 const ApiUtils = {
 	/* eslint-disable */
 	checkStatus: async (response, options) => {
-		console.log("-response status in utils--", response.status);
+		console.log("-response status in utils--", options);
 		// let resp = await response.json();
 		// console.log('------response----', resp);
 
@@ -71,8 +71,8 @@ const ApiUtils = {
 	},
 	/* eslint-enable */
 	// for localhost
-	getRootUrl: () => "http://10.0.2.2:3000/api",
-	// getRootUrl: (): string => "https://scratchandwin.herokuapp.com/api",
+	// getRootUrl: () => "http://10.0.2.2:3000/api",
+	getRootUrl: (): string => "https://scratchandwin.herokuapp.com/api",
 
 	getImageUrl: (): string => "http://172.31.119.57:3000/api",
 };

@@ -26,3 +26,17 @@
 
 Release Notes: 22.02.20
 - added "Referrals screen" and set navigation to it. Can be accesed from setting menu by pressing "My referrals".
+- added referral overview tab;
+- added "my referral earnings" api;
+- added "add to my balance" referral earnings button and api;
+- added "copy to clipboard" and "share" referral code functionality;
+- added "apply referral code" functionality;
+- added "How it works" popup;
+- added "Referral list" tab and api;
+- added functionality that sends app notification when referral code was applied;
+- changed "tockens" to "tokens" in all screens;
+- deleted field for custom amount on buy screen;
+- made option cards on buy screen touchable and added onpress functionality;
+- added navigation footer to game screen;
+- included account details to navigation popUp;
+- changed keyboardType(to email) for email input on login screen;

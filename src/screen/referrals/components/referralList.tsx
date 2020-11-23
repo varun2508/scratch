@@ -32,8 +32,8 @@ const ReferralList = function(props: Props): React.ReactElement {
 	const { store } = useAppContext();
 	const { user } = store;
 	const { referrals } = user;
-
-	if (referrals.length === 0) {
+	console.log("----------referrals", referrals);
+	if (referrals && referrals.length === 0) {
 		return (
 			<NoResultsContainer>
 				<IconFt name={"search"} size={38} color={sc.color.primary}></IconFt>
@@ -45,14 +45,14 @@ const ReferralList = function(props: Props): React.ReactElement {
 		<ScrollView style={styles.container}>
 			<Wrapper>
 				<TextContainer>
-					<Title>{referrals.length} referrals</Title>
+					<Title>{referrals.length || 0} referrals</Title>
 				</TextContainer>
 				{referrals &&
 					referrals.map(
 						(el, i): React.ReactElement => {
 							return (
 								<WinnerRow
-									key={el.id}
+									key={el.date}
 									style={i % 2 === 0 ? styles.whiteRow : styles.greyRow}
 								>
 									<FirstColumn>
@@ -60,7 +60,7 @@ const ReferralList = function(props: Props): React.ReactElement {
 											{el.firstName} {el.lastName}
 										</GameName>
 										<WinInfo>
-											<InfoText>Tockens earned:</InfoText>
+											<InfoText>Tokens earned:</InfoText>
 											<Image
 												style={{ marginLeft: 4, marginTop: 4 }}
 												source={require("icons/coin.png")}

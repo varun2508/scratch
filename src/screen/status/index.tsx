@@ -61,8 +61,8 @@ const StatusScreen = function(props: Props): React.ReactElement {
 					<Wrapper>
 						<OptionContainer>
 							<TextContainer>
-								<Title>Available tockens</Title>
-								<SubText>Tockens allow you to play games and win!</SubText>
+								<Title>Available tokens</Title>
+								<SubText>Tokens allow you to play games and win!</SubText>
 							</TextContainer>
 							<CardContaienr>
 								<Card>
@@ -72,7 +72,7 @@ const StatusScreen = function(props: Props): React.ReactElement {
 											source={require("icons/coin.png")}
 										/>
 										<Points>{user.tockens || 0}</Points>
-										<PointsText>Tockens</PointsText>
+										<PointsText>Tokens</PointsText>
 									</PointContainer>
 								</Card>
 								<ButtonContainer>
@@ -90,7 +90,7 @@ const StatusScreen = function(props: Props): React.ReactElement {
 							<TextContainer>
 								<Title>Cash balance</Title>
 								<SubText>
-									You can withdraw your cash winnings. Or buy more play tockens
+									You can withdraw your cash winnings. Or buy more play tokens
 									for cash. !
 								</SubText>
 							</TextContainer>
@@ -101,8 +101,8 @@ const StatusScreen = function(props: Props): React.ReactElement {
 											style={{ marginRight: 4 }}
 											source={require("icons/64.png")}
 										/>
-										<Points>15</Points>
-										<PointsText>Tockens</PointsText>
+										<Points>0</Points>
+										{/* <PointsText>Tokens</PointsText> */}
 									</PointContainer>
 								</Card>
 								<ButtonContainer>

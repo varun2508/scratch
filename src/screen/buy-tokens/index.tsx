@@ -1,46 +1,54 @@
-import React from "react";
-import { View, Text, Image, TextInput } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import styled from "styled-components/native";
 
 import { Header } from "shared";
 import ScreenFooter from "shared/footer";
 
-// import console = require('console');
+const amountArray = [
+	{ tokens: "100", value: 110 },
+	{ tokens: "200", value: 205 },
+	{ tokens: "500", value: 495 },
+	{ tokens: "1000", value: 980 },
+];
 
-const amountArray = ["100", "200", "500", "1000"];
-
-class BuyTokens extends React.Component {
-	state = { text: "" };
-
-	render() {
-		const { componentId, back, navigation } = this.props;
-		return (
-			<View style={{ backgroundColor: "#E5E5E5", flex: 1 }}>
-				<Header
-					screenTitle="Buy tockens"
-					componentId={componentId}
-					back={back}
-					navigation={navigation}
-				/>
-				<Container style={{ backgroundColor: "#E5E5E5", flex: 1 }}>
-					<AmountContainer>
-						<Title>Choose amount</Title>
-						<SubText>
-							Select how many tockens you need or enter a custom amount below.
-						</SubText>
-					</AmountContainer>
-					<CadsContainer>
-						{amountArray.map((amount) => (
-							<Card key={amount} isSelected={amount === "200"}>
+const BuyTokens = (props): React.ReactElement => {
+	const { componentId, back, navigation } = props;
+	const [chosenOption, handleChosenOption] = useState(amountArray[1]);
+	return (
+		<View style={{ backgroundColor: "#E5E5E5", flex: 1 }}>
+			<Header
+				screenTitle="Buy tokens"
+				componentId={componentId}
+				back={back}
+				navigation={navigation}
+			/>
+			<Container style={{ backgroundColor: "#E5E5E5", flex: 1 }}>
+				<AmountContainer>
+					<Title>Choose amount</Title>
+					<SubText>
+						Select how many tokens you need or enter a custom amount below.
+					</SubText>
+				</AmountContainer>
+				<CadsContainer>
+					{amountArray.map((element) => (
+						<TouchableOpacity
+							key={element.tokens}
+							onPress={() => handleChosenOption(element)}
+						>
+							<Card isSelected={element.tokens === chosenOption.tokens}>
 								<Image
 									style={{ marginRight: 4 }}
 									source={require("icons/coin.png")}
 								/>
-								<Amount isSelected={amount === "200"}>{amount}</Amount>
+								<Amount isSelected={element.tokens === chosenOption.tokens}>
+									{element.tokens}
+								</Amount>
 							</Card>
-						))}
-					</CadsContainer>
-					<View style={{ marginTop: 16 }}>
+						</TouchableOpacity>
+					))}
+				</CadsContainer>
+				{/* <View style={{ marginTop: 16 }}>
 						<Title>Enter custom amount:</Title>
 						<TextInput
 							placeholder="e.g., 85"
@@ -54,48 +62,45 @@ class BuyTokens extends React.Component {
 							onChangeText={(text) => this.setState({ text })}
 							value={this.state.text}
 						/>
-					</View>
-					<View style={{ marginTop: 16 }}>
-						<Title>Review & pay</Title>
-						<SubText>
-							Select how many tockens you need or enter a custom amount below.
-						</SubText>
-						<WhiteCard>
-							<CardOption>
-								<Key>Order quantity:</Key>
-								<Value>200 tockens</Value>
-							</CardOption>
-							<CardOption>
-								<Key>To pay:</Key>
-								<Value>₦205</Value>
-							</CardOption>
-						</WhiteCard>
-					</View>
+					</View> */}
+				<View style={{ marginTop: 16 }}>
+					<Title>Review & pay</Title>
+					<SubText>
+						Select how many tokens you need or enter a custom amount below.
+					</SubText>
+					<WhiteCard>
+						<CardOption>
+							<Key>Order quantity:</Key>
+							<Value>{chosenOption.tokens} tokens</Value>
+						</CardOption>
+						<CardOption>
+							<Key>To pay:</Key>
+							<Value>₦{chosenOption.value}</Value>
+						</CardOption>
+					</WhiteCard>
+				</View>
 
-					<View
-						style={{
-							backgroundColor: "#FBDC42",
-							borderRadius: 25,
-							width: 200,
-							height: 50,
-							justifyContent: "center",
-							alignItems: "center",
-							alignSelf: "center",
-							marginTop: 12,
-						}}
-					>
-						<Text
-							style={{ color: "#333333", fontSize: 16, fontWeight: "bold" }}
-						>
-							Pay now
-						</Text>
-					</View>
-				</Container>
-				<ScreenFooter navigation={this.props.navigation} />
-			</View>
-		);
-	}
-}
+				<View
+					style={{
+						backgroundColor: "#FBDC42",
+						borderRadius: 25,
+						width: 200,
+						height: 50,
+						justifyContent: "center",
+						alignItems: "center",
+						alignSelf: "center",
+						marginTop: 12,
+					}}
+				>
+					<Text style={{ color: "#333333", fontSize: 16, fontWeight: "bold" }}>
+						Pay now
+					</Text>
+				</View>
+			</Container>
+			<ScreenFooter navigation={props.navigation} />
+		</View>
+	);
+};
 
 const CardOption = styled.View`
 	flex-direction: row;
