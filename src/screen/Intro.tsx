@@ -55,7 +55,7 @@ interface Props {
 function Intro(props: Props): React.ReactElement {
 	let timer: number;
 	const { state, setUser } = useAppContext();
-	const { changeThemeType } = useThemeContext();
+	// const { changeThemeType } = useThemeContext();
 	const [isLoggingIn, setIsLoggingIn] = React.useState<boolean>(false);
 
 	const onLogin = (): void => {
@@ -101,7 +101,7 @@ function Intro(props: Props): React.ReactElement {
 				<View style={{ marginTop: 8 }} />
 				<Button
 					testID="btn3"
-					onClick={(): void => changeThemeType()}
+					// onClick={(): void => changeThemeType()}
 					text={getString("CHANGE_THEME")}
 				/>
 			</ButtonWrapper>

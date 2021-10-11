@@ -77,7 +77,7 @@ function Results(props: Props): React.ReactElement {
 				) : (
 					<GreyTextContainer>
 						<BoldText>No win</BoldText>
-						<GreyText>However, you 5 tokens back!</GreyText>
+						<GreyText>However, you will receive 5 tokens back!</GreyText>
 					</GreyTextContainer>
 				)}
 			</View>

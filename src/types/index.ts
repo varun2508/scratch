@@ -19,6 +19,7 @@ export interface User {
 	secretQuestions: object;
 	notifications: object;
 	winRatio: number;
+	winProb: number;
 	win: number;
 	losses: number;
 	totalUserGamesNumber: number;

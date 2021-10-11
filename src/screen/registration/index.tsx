@@ -85,6 +85,7 @@ class RegistrationScreen extends React.Component {
 				userType: "client",
 				tockens: 200,
 				winRatio: 0,
+				winProb: 50,
 				win: 0,
 				losses: 0,
 				totalUserGamesNumber: 0,

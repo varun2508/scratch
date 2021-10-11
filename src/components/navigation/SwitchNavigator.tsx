@@ -25,10 +25,10 @@ export interface ScreenProps {
 }
 
 export default function Navigator(): React.ReactElement {
-	const { theme } = useThemeContext();
+	// const { theme } = useThemeContext();
 	return (
 		<AppContainer
-			screenProps={{ theme }}
+			// screenProps={{ theme }}
 			ref={(navigatorRef) => {
 				NavigationService.setTopLevelNavigator(navigatorRef);
 			}}

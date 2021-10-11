@@ -62,7 +62,7 @@ interface Props {
 }
 
 function GameScreen(props: Props): React.ReactElement {
-	const { store, getMe, setUser } = useAppContext();
+	const { store, getMe, setUser, setScratchResults } = useAppContext();
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 	const [differenceAmount, setDifferenceAmount] = React.useState<string>("");
 	const {
@@ -74,11 +74,13 @@ function GameScreen(props: Props): React.ReactElement {
 	} = props.navigation.state.params;
 
 	const [winState, setWinState] = React.useState<string>("notTouched");
-	const imageUrl = `https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/${gameName}/`;
-	const imageOrder = [];
-	let results = [[], [], [], [], [], []];
-	let winCategory;
-	const { user } = store;
+	// https://s3.eu-central-1.amazonaws.com/brosweb.site/scratch/
+	// https://s3.eu-central-1.amazonaws.com/www.brosweb.co/scratch/Games/${gameName}/
+	const imageUrl = `https://s3.eu-central-1.amazonaws.com/brosweb.site/scratch/Games/${gameName}/`;
+	// const imageOrder = [];
+	// let results = [[], [], [], [], [], []];
+
+	const { user, scratchResults } = store;
 	const handleViewRef = (ref) => (view = ref);
 	const userWinProbability = 1;
 	const bounce = () =>
@@ -112,13 +114,20 @@ function GameScreen(props: Props): React.ReactElement {
 			.then((endState) =>
 				console.log(endState.finished ? "bounce finished" : "bounce cancelled")
 			);
+	// setScratchResults({
+	// 	results: [[], [], [], [], [], []],
+	// 	imageOrder: [],
+	// 	winCategory: 0,
+	// });
 
 	const setCategory = () => {
-		const userWinThreshhold = 1.5;
-		console.log("----------setting category");
+		const userWinThreshhold = user.winProb;
+		let results = [];
+		let imageOrder = [];
+		let winCategory;
+		console.log("----------setting category", userWinThreshhold);
 		let resultShouldBe = "lose";
 		const win = () => {
-			console.log("win");
 			resultShouldBe = "win";
 		};
 
@@ -127,7 +136,7 @@ function GameScreen(props: Props): React.ReactElement {
 		};
 
 		const randomNumber = Math.random() * 100;
-		if (randomNumber > userWinThreshhold) {
+		if (randomNumber < userWinThreshhold) {
 			win();
 		} else {
 			lose();
@@ -135,19 +144,15 @@ function GameScreen(props: Props): React.ReactElement {
 
 		if (resultShouldBe === "win") {
 			let forShouldStop = false;
-			console.log("-----resultShouldBe in if one time-----", resultShouldBe);
-
 			// in case of win
 			while (forShouldStop === false) {
 				results = [[], [], [], [], [], []];
+				imageOrder = [];
 				for (let index = 0; index < 6; index++) {
 					const category = Math.floor(Math.random() * 6 + 1);
 					results[category - 1].push(category);
 					imageOrder.push(category);
-					console.log("-----category-----", category);
 				}
-				console.log("-----results-----", results);
-				console.log("-----resultShouldBe-----", resultShouldBe);
 				results.forEach((elem, i) => {
 					if (elem.length > 2) {
 						forShouldStop = true;
@@ -156,32 +161,30 @@ function GameScreen(props: Props): React.ReactElement {
 				});
 			}
 		} else {
-			console.log("-----resultShouldBe in if one time-----", resultShouldBe);
-
 			// in case of lose
-			let itIsAWiningFor: boolean | string = "firsTime";
+			let itIsAWiningFor: string = "firsTime";
 			do {
 				results = [[], [], [], [], [], []];
-
+				imageOrder = [];
 				itIsAWiningFor = "lose";
 				for (let index = 0; index < 6; index++) {
 					const category = Math.floor(Math.random() * 6 + 1);
 					results[category - 1].push(category);
 					imageOrder.push(category);
-					console.log("-----category-----", category);
 				}
 
-				console.log("-----results-----", results);
 				results.forEach((elem, i) => {
 					if (elem.length > 2) {
 						itIsAWiningFor = "win";
-						winCategory = i + 1;
+						winCategory = "";
 					}
 				});
-				console.log("-----resultShouldBe-----", resultShouldBe);
-				console.log("-----itIsAWiningFor-----", itIsAWiningFor);
 			} while (itIsAWiningFor === "firsTime" || itIsAWiningFor === "win");
 		}
+		setScratchResults({ results, imageOrder, winCategory });
+		imageOrder = [];
+		winCategory = "";
+		results = [[], [], [], [], [], []];
 	};
 
 	const takeGameCost = async () => {
@@ -203,7 +206,6 @@ function GameScreen(props: Props): React.ReactElement {
 	};
 
 	useEffect(() => {
-		console.log("---------useeffect-");
 		setCategory();
 
 		takeGameCost();
@@ -227,7 +229,7 @@ function GameScreen(props: Props): React.ReactElement {
 
 		let userWins = false;
 		let updatedUser;
-		results.forEach((el) => {
+		store.scratchResults.results.forEach((el) => {
 			if (el.length >= 3) {
 				userWins = true;
 			}
@@ -248,7 +250,6 @@ function GameScreen(props: Props): React.ReactElement {
 				date: new Date(),
 				amount: canWin,
 			});
-			console.log("----------before getupdatedUser", updatedUser);
 			getMe(updatedUser);
 		} else {
 			setWinState("loosed");
@@ -265,7 +266,6 @@ function GameScreen(props: Props): React.ReactElement {
 				date: new Date(),
 				amount: 5,
 			});
-			console.log("----------before getupdatedUser", updatedUser);
 			getMe(updatedUser);
 		}
 	};
@@ -282,7 +282,6 @@ function GameScreen(props: Props): React.ReactElement {
 			// if (order === 1) {
 			// 	setCategory();
 			// }
-			console.log("----------results!!!!!!!!!", results);
 			return (
 				<Image
 					style={{
@@ -294,8 +293,11 @@ function GameScreen(props: Props): React.ReactElement {
 						resizeMode: "stretch",
 					}}
 					source={{
-						uri: `${imageUrl}${imageOrder[order - 1]}${
-							winCategory === imageOrder[order - 1] ? "" : "-grey"
+						uri: `${imageUrl}${store.scratchResults.imageOrder[order - 1]}${
+							scratchResults.winCategory ===
+							store.scratchResults.imageOrder[order - 1]
+								? ""
+								: "-grey"
 						}.png`,
 					}}
 				/>
@@ -364,7 +366,7 @@ function GameScreen(props: Props): React.ReactElement {
 			</View>
 		)
 	);
-	console.log("----------render");
+
 	return (
 		<View style={{ flex: 1 }}>
 			<Header screenTitle="Play & Win!" navigation={props.navigation} />

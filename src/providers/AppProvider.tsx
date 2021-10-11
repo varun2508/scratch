@@ -8,14 +8,25 @@ interface Context {
 	setNotifications: (notifications: Notifications) => void;
 	getMe: (user: User) => void;
 	resetUser: () => void;
+	setScratchResults: (results: {
+		results: Array<[]>;
+		imageOrder: Array<[]>;
+		winCategory: number;
+	}) => void;
 }
 const [useCtx, Provider] = createCtx<Context>();
 
-type dispatchType = "reset-user" | "set-user" | "get-me" | "set-notifications";
+type dispatchType =
+	| "reset-user"
+	| "set-user"
+	| "get-me"
+	| "set-notifications"
+	| "set-scratchResults";
 
 export interface State {
 	user: User;
 	notifications: Notifications;
+	scratchResults: Array<[]>;
 }
 
 const initialState: State = {
@@ -29,6 +40,11 @@ const initialState: State = {
 		id: "",
 	},
 	notifications: { data: [], unread: 0 },
+	scratchResults: {
+		results: [],
+		imageOrder: [],
+		winCategory: 0,
+	},
 };
 
 interface Action {
@@ -82,6 +98,16 @@ const resetUser = (dispatch: React.Dispatch<Action>) => (): void => {
 	});
 };
 
+const setScratchResults = (dispatch: React.Dispatch<Action>) => (
+	results: Array<[]>
+): void => {
+	console.log("-----setScratchResults callllled-----", results);
+	dispatch({
+		type: "set-scratchResults",
+		payload: { scratchResults: results },
+	});
+};
+
 const reducer: Reducer = (store = initialState, action) => {
 	switch (action.type) {
 		case "reset-user":
@@ -91,6 +117,8 @@ const reducer: Reducer = (store = initialState, action) => {
 			return { ...store, user: action.payload.user };
 		case "set-notifications":
 			return { ...store, notifications: action.payload.notifications };
+		case "set-scratchResults":
+			return { ...store, scratchResults: action.payload.scratchResults };
 		default:
 			return store;
 	}
@@ -104,6 +132,7 @@ function AppProvider(props: Props): React.ReactElement {
 		setUser: setUser(dispatch),
 		resetUser: resetUser(dispatch),
 		setNotifications: setNotifications(dispatch),
+		setScratchResults: setScratchResults(dispatch),
 	};
 
 	return <Provider value={{ store, ...actions }}>{props.children}</Provider>;
